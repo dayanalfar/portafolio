@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dayana Alfaro | Portafolio</title>
+
+  <!-- Fuente Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      color: #ffffff;
+      background-color: #000FFF;
+      transition: background-color 0.25s ease;
+    }
+
+    /* =========================================
+       TRANSICIONES ENTRE VISTAS
+       ========================================= */
+    .vista-pantalla {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+      display: none;
+    }
+
+    .vista-pantalla.activa {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================
+       1. VISTA: SOBRE MÍ (Inicio Azul)
+       ========================================= */
+    #vista-sobre-mi {
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .hero-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1.hero-title {
+      font-size: 125px;
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.07em;
+      margin-bottom: 35px;
+      text-transform: lowercase;
+    }
+
+    .hero-bio {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.8;
+      max-width: 820px;
+      margin-bottom: 45px;
+      opacity: 0.95;
+    }
+
+    .hero-bio p {
+      margin-bottom: 18px;
+    }
+
+    .btn-trabajos {
+      display: inline-block;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
+      background-color: #000FFF;
+      border: 2px solid #ffffff;
+      padding: 14px 42px;
+      border-radius: 50px;
+      cursor: pointer;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1), 
+                  background-color 0.2s ease, 
+                  color 0.2s ease,
+                  box-shadow 0.2s ease;
+    }
+
+    .btn-trabajos:hover {
+      background-color: #ffffff;
+      color: #000FFF;
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .btn-trabajos:active {
+      transform: translateY(0) scale(1);
+    }
+
+    /* =========================================
+       BARRA DE NAVEGACIÓN
+       ========================================= */
+    .nav-container {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 30px 50px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-container.visible {
+      opacity: 1;
+    }
+
+    .nav-box {
+      display: inline-flex;
+      background-color: #000000;
+      padding: 12px 28px;
+      border-radius: 40px;
+      gap: 25px;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #7a7a7a;
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      text-transform: lowercase;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      transition: color 0.15s ease, transform 0.2s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* =========================================
+       2. VISTA: TRABAJOS (#212121)
+       ========================================= */
+    .seccion-oscura {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 50px 80px 50px;
+    }
+
+    .trabajos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 35px;
+      margin-top: 10px;
+    }
+
+    .card-proyecto {
+      background-color: #3b3b3b;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      color: #ffffff;
+      display: block;
+      border: 1px solid #4a4a4a;
+      will-change: transform, box-shadow;
+      transform: translateZ(0);
+      transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+                  background-color 0.3s ease,
+                  border-color 0.3s ease,
+                  box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .card-proyecto.card-esta-bien:hover {
+      background-color: #000FFF;
+      border-color: #000FFF;
+      transform: translateY(-6px) translateZ(0) scale(1.01);
+      box-shadow: 0 16px 32px rgba(0, 15, 255, 0.35);
+    }
+
+    .card-proyecto.card-social-media:hover {
+      background-color: #FE440D;
+      border-color: #FE440D;
+      transform: translateY(-6px) translateZ(0) scale(1.01);
+      box-shadow: 0 16px 32px rgba(254, 68, 13, 0.35);
+    }
+
+    .thumb-wrapper {
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      position: relative;
+      background-color: #1a1a1a;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      transform: translateZ(0);
+    }
+
+    .thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 1 !important; /* Siempre visible de inmediato */
+      transform-origin: center center;
+      will-change: transform;
+      backface-visibility: hidden;
+      transform: translateZ(0) scale(1);
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .card-proyecto:hover .thumb-img {
+      transform: translateZ(0) scale(1.08);
+    }
+
+    .card-info {
+      padding: 20px 24px 26px 24px;
+    }
+
+    .card-info h3 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .card-info p {
+      color: #e0e0e0;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    /* =========================================
+       3. DETALLES DE PROYECTOS
+       ========================================= */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 20px;
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 30px;
+      color: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 35px;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1), 
+                  background-color 0.2s ease, 
+                  color 0.2s ease, 
+                  border-color 0.2s ease;
+    }
+
+    .btn-back:hover {
+      background-color: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .btn-back:active {
+      transform: translateY(0) scale(1);
+    }
+
+    .project-header h1 {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 15px;
+    }
+
+    .project-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e0e0e0;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .project-description {
+      font-size: 14px;
+      color: #cccccc;
+      line-height: 1.6;
+      max-width: 850px;
+      margin-bottom: 22px;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 45px;
+    }
+
+    .tag-badge {
+      background-color: #111111;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+
+    .brand-section-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-top: 45px;
+      margin-bottom: 25px;
+      color: #ffffff;
+    }
+
+    .project-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    /* SCROLL REVEAL BIDIRECCIONAL FLUIDO (SOLO PARA GALERÍAS) */
+    .gallery-item {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #1a1a1a;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      cursor: zoom-in;
+      opacity: 0;
+      transform: translateY(35px) scale(0.98);
+      transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.25s ease;
+      will-change: opacity, transform;
+    }
+
+    .gallery-item.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    /* SECCIÓN TAMBIÉN TE PUEDE INTERESAR (SIEMPRE VISIBLE DE INMEDIATO) */
+    .related-projects-section {
+      margin-top: 60px;
+      padding-top: 30px;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .related-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+
+    .related-grid {
+      max-width: 520px;
+    }
+
+    /* =========================================
+       4. VISTA: CV (HOJAS LIMPIAS VERTICALES)
+       ========================================= */
+    .cv-container {
+      max-width: 820px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px;
+      margin-top: 10px;
+    }
+
+    .cv-hoja-link {
+      display: block;
+      width: 100%;
+      cursor: zoom-in;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      background-color: #ffffff;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .cv-hoja-link:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+    }
+
+    .cv-hoja-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* =========================================
+       MODAL / LIGHTBOX PARA CV Y GALERÍA
+       ========================================= */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.92);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      cursor: zoom-out;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .lightbox-modal.open {
+      opacity: 1;
+    }
+
+    .lightbox-img {
+      max-width: 95%;
+      max-height: 92vh;
+      border-radius: 6px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+      transform: scale(0.96);
+      transition: transform 0.25s ease;
+    }
+
+    .lightbox-modal.open .lightbox-img {
+      transform: scale(1);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #ffffff;
+      font-size: 38px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .close-btn:hover {
+      color: #000FFF;
+    }
+
+    /* =========================================
+       ICONOS SOCIALES
+       ========================================= */
+    .social-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      margin-top: 70px;
+      padding-top: 20px;
+    }
+
+    .social-link {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .social-link img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .social-link:hover {
+      transform: translateY(-4px) scale(1.08);
+      opacity: 0.85;
+    }
+
+    @media (max-width: 768px) {
+      h1.hero-title {
+        font-size: 55px;
+        letter-spacing: -0.04em;
+      }
+      .project-header h1 {
+        font-size: 36px;
+      }
+      .brand-section-title {
+        font-size: 26px;
+      }
+      .trabajos-grid, .project-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .related-grid {
+        max-width: 100%;
+      }
+      .nav-container {
+        padding: 20px;
+      }
+      .seccion-oscura {
+        padding: 20px 20px 60px 20px;
+      }
+      .cv-container {
+        gap: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de navegación -->
+  <nav class="nav-container" id="main-nav">
+    <div class="nav-box">
+      <button class="nav-btn" onclick="mostrarSeccion('sobre-mi')">sobre mí</button>
+      <button class="nav-btn active" onclick="mostrarSeccion('trabajos')">trabajos</button>
+      <button class="nav-btn" onclick="mostrarSeccion('cv')">cv</button>
+    </div>
+  </nav>
+
+  <!-- 1. Pantalla Inicial (Sobre Mí) -->
+  <section id="vista-sobre-mi" class="vista-pantalla activa" style="display: flex;">
+    <main class="hero-container">
+      <h1 class="hero-title">dayana alfaro</h1>
+
+      <div class="hero-bio">
+        <p>
+          Soy estudiante del octavo ciclo de Comunicación y Diseño Gráfico, enfocada en el diseño digital, la comunicación visual y la creación de contenido. Cuento con experiencia en el desarrollo de piezas gráficas para redes sociales, destacando mi trabajo en el proyecto de impacto social "Está bien no estar bien", adaptando información compleja a un lenguaje visual claro y accesible. Manejo a nivel avanzado herramientas de Adobe (Illustrator, Photoshop, XD) y plataformas de edición de video.
+        </p>
+        <p>
+          Me interesa explorar nuevas formas de comunicar ideas de manera creativa y funcional, manteniéndome siempre al tanto de las tendencias visuales. Disfruto de los desafíos que me permiten aplicar mi aprendizaje autónomo y crear soluciones gráficas que conecten verdaderamente con el público.
+        </p>
+        <p>
+          Busco seguir creciendo profesionalmente, consolidar un perfil versátil y aportar mi capacidad de organización, planificación y atención al detalle en cada proyecto en el que participo.
+        </p>
+      </div>
+
+      <button class="btn-trabajos" onclick="mostrarSeccion('trabajos')">Ver trabajos</button>
+    </main>
+  </section>
+
+  <!-- 2. Pantalla: Trabajos (Fondo #212121) -->
+  <section id="vista-trabajos" class="vista-pantalla seccion-oscura">
+    
+    <div class="trabajos-grid">
+      
+      <!-- Proyecto 1: Está bien no estar bien -->
+      <div class="card-proyecto card-esta-bien" onclick="mostrarSeccion('proyecto-esta-bien')">
+        <div class="thumb-wrapper">
+          <img src="ESTA BIEN NO ESTAR BIENN.png" alt="Está bien no estar bien" class="thumb-img">
+        </div>
+        <div class="card-info">
+          <h3>Está bien no estar bien</h3>
+          <p>Social Media & Branding</p>
+        </div>
+      </div>
+
+      <!-- Proyecto 2: Social Media Lab -->
+      <div class="card-proyecto card-social-media" onclick="mostrarSeccion('proyecto-social-media')">
+        <div class="thumb-wrapper">
+          <img src="social.png" alt="SOCIAL MEDIA LAB" class="thumb-img">
+        </div>
+        <div class="card-info">
+          <h3>SOCIAL MEDIA LAB</h3>
+          <p>Diseño de contenido digital</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Iconos de Redes Sociales -->
+    <div class="social-footer">
+      <a href="https://www.behance.net/dayanaalfaro4" target="_blank" rel="noopener noreferrer" class="social-link" title="Behance">
+        <img src="ICONS-01.png" alt="Behance">
+      </a>
+      <a href="https://www.linkedin.com/in/dayana-alfaro-a690a5428/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+        <img src="ICONS-02.png" alt="LinkedIn">
+      </a>
+    </div>
+
+  </section>
+
+  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien) -->
+  <section id="vista-proyecto-esta-bien" class="vista-pantalla seccion-oscura">
+    
+    <button class="btn-back" onclick="mostrarSeccion('trabajos')">
+      &larr; De vuelta al trabajo
+    </button>
+
+    <header class="project-header">
+      <h1>Está bien no estar bien</h1>
+      <div class="project-meta-row">
+        <span>CAMPAÑA DE CONCIENTIZACIÓN Y REDES SOCIALES</span>
+        <span>2026</span>
+      </div>
+      <p class="project-description">
+        Diseño y desarrollo de contenido visual para redes sociales enfocado en el bienestar mental adolescente bajo el marco del ODS 3.
+      </p>
+      <div class="project-tags">
+        <span class="tag-badge">DISEÑO GRÁFICO</span>
+        <span class="tag-badge">SOCIAL MEDIA</span>
+        <span class="tag-badge">ADOBE ILLUSTRATOR</span>
+      </div>
+    </header>
+
+    <!-- Galería con las 10 piezas gráficas -->
+    <div class="project-gallery-grid">
+      <div class="gallery-item" onclick="abrirModal('postg-10.png')">
+        <img src="postg-10.png" alt="Lo que deberíamos llevar en la mochila">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-09.png')">
+        <img src="postg-09.png" alt="Nota perfecta y el proceso real">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-08.png')">
+        <img src="postg-08.png" alt="Estoy bien: lo que hay detrás">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-01.png')">
+        <img src="postg-01.png" alt="¿Por qué me siento tan cansada si solo estudio?">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-02.png')">
+        <img src="postg-02.png" alt="¿Cómo te sientes hoy realmente?">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-03.png')">
+        <img src="postg-03.png" alt="Mito vs Realidad: Agotamiento constante">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-04.png')">
+        <img src="postg-04.png" alt="Mitos vs Realidad: Bienestar emocional">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-05.png')">
+        <img src="postg-05.png" alt="Red de apoyo ante un examen difícil">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-06.png')">
+        <img src="postg-06.png" alt="El agotamiento no es normal: OFF / ON">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('postg-07.png')">
+        <img src="postg-07.png" alt="Tu bienestar también se construye con pequeñas acciones">
+      </div>
+    </div>
+
+    <!-- SECCIÓN: TAMBIÉN TE PUEDE INTERESAR (Carga instantánea) -->
+    <section class="related-projects-section">
+      <h2 class="related-title">También te puede interesar</h2>
+      
+      <div class="related-grid">
+        <div class="card-proyecto card-social-media" onclick="mostrarSeccion('proyecto-social-media')">
+          <div class="thumb-wrapper">
+            <img src="social.png" alt="SOCIAL MEDIA LAB" class="thumb-img">
+          </div>
+          <div class="card-info">
+            <h3>SOCIAL MEDIA LAB</h3>
+            <p>Diseño de contenido digital</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Iconos de Redes Sociales -->
+    <div class="social-footer">
+      <a href="https://www.behance.net/dayanaalfaro4" target="_blank" rel="noopener noreferrer" class="social-link" title="Behance">
+        <img src="ICONS-01.png" alt="Behance">
+      </a>
+      <a href="https://www.linkedin.com/in/dayana-alfaro-a690a5428/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+        <img src="ICONS-02.png" alt="LinkedIn">
+      </a>
+    </div>
+
+  </section>
+
+  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB) -->
+  <section id="vista-proyecto-social-media" class="vista-pantalla seccion-oscura">
+    
+    <button class="btn-back" onclick="mostrarSeccion('trabajos')">
+      &larr; De vuelta al trabajo
+    </button>
+
+    <header class="project-header">
+      <h1>SOCIAL MEDIA LAB</h1>
+      <div class="project-meta-row">
+        <span>DISEÑO DE CONTENIDO DIGITAL</span>
+        <span>2026</span>
+      </div>
+      <p class="project-description">
+        Recopilación de propuestas visuales y contenido para redes sociales desarrollado para diversas marcas, explorando diferentes estilos gráficos, composiciones y paletas de color.
+      </p>
+      <div class="project-tags">
+        <span class="tag-badge">DISEÑO GRÁFICO</span>
+        <span class="tag-badge">SOCIAL MEDIA</span>
+        <span class="tag-badge">ADOBE ILLUSTRATOR</span>
+      </div>
+    </header>
+
+    <!-- Subsección 1: TAYAZ -->
+    <h2 class="brand-section-title">TAYAZ</h2>
+    <div class="project-gallery-grid">
+      <div class="gallery-item" onclick="abrirModal('La foto de los jeans de Tayaz.png')">
+        <img src="La foto de los jeans de Tayaz.png" alt="Tayaz Jeans">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')">
+        <img src="La foto de la chaqueta y bolso de Tayaz.png" alt="Tayaz Closet Nueva Colección">
+      </div>
+    </div>
+
+    <!-- Subsección 2: KARA OK -->
+    <h2 class="brand-section-title">KARA OK</h2>
+    <div class="project-gallery-grid">
+      <div class="gallery-item" onclick="abrirModal('POST COMERCIAL.png')">
+        <img src="POST COMERCIAL.png" alt="Karaoke Night">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('karaokeoke.png')">
+        <img src="karaokeoke.png" alt="Top Canciones Karaoke">
+      </div>
+    </div>
+
+    <!-- Subsección 3: Jar Donuts -->
+    <h2 class="brand-section-title">Jar Donuts</h2>
+    <div class="project-gallery-grid">
+      <div class="gallery-item" onclick="abrirModal('Foto 1 de Jar Donuts.png')">
+        <img src="Foto 1 de Jar Donuts.png" alt="Compromiso con Cajamarca">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('Foto 2 de Jar Donuts.png')">
+        <img src="Foto 2 de Jar Donuts.png" alt="Compramos leche a pequeños productores">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('Foto 3 de Jar Donuts.png')">
+        <img src="Foto 3 de Jar Donuts.png" alt="Realizamos pagos constantes y justos">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('Foto 4 de Jar Donuts.png')">
+        <img src="Foto 4 de Jar Donuts.png" alt="Estabilidad económica familias ganaderas">
+      </div>
+      <div class="gallery-item" onclick="abrirModal('Foto 5 de Jar Donuts.png')">
+        <img src="Foto 5 de Jar Donuts.png" alt="Conoce las historias detrás de cada donut">
+      </div>
+    </div>
+
+    <!-- SECCIÓN: TAMBIÉN TE PUEDE INTERESAR (Carga instantánea) -->
+    <section class="related-projects-section">
+      <h2 class="related-title">También te puede interesar</h2>
+      
+      <div class="related-grid">
+        <div class="card-proyecto card-esta-bien" onclick="mostrarSeccion('proyecto-esta-bien')">
+          <div class="thumb-wrapper">
+            <img src="ESTA BIEN NO ESTAR BIENN.png" alt="Está bien no estar bien" class="thumb-img">
+          </div>
+          <div class="card-info">
+            <h3>Está bien no estar bien</h3>
+            <p>Social Media & Branding</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Iconos de Redes Sociales -->
+    <div class="social-footer">
+      <a href="https://www.behance.net/dayanaalfaro4" target="_blank" rel="noopener noreferrer" class="social-link" title="Behance">
+        <img src="ICONS-01.png" alt="Behance">
+      </a>
+      <a href="https://www.linkedin.com/in/dayana-alfaro-a690a5428/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+        <img src="ICONS-02.png" alt="LinkedIn">
+      </a>
+    </div>
+
+  </section>
+
+  <!-- 5. Pantalla: CV (Inglés primero, Español después) -->
+  <section id="vista-cv" class="vista-pantalla seccion-oscura">
+    
+    <div class="cv-container">
+      <!-- 1. Inglés -->
+      <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
+        <img src="Dayana Alfaro.CV.INGLES.png" alt="CV English" class="cv-hoja-img">
+      </div>
+
+      <!-- 2. Español -->
+      <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
+        <img src="Dayana Alfaro.CV.png" alt="CV Español" class="cv-hoja-img">
+      </div>
+    </div>
+
+    <!-- Iconos de Redes Sociales -->
+    <div class="social-footer">
+      <a href="https://www.behance.net/dayanaalfaro4" target="_blank" rel="noopener noreferrer" class="social-link" title="Behance">
+        <img src="ICONS-01.png" alt="Behance">
+      </a>
+      <a href="https://www.linkedin.com/in/dayana-alfaro-a690a5428/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+        <img src="ICONS-02.png" alt="LinkedIn">
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Ventana Modal de aumento para CV y Galerías -->
+  <div id="lightbox" class="lightbox-modal" onclick="cerrarModal()">
+    <span class="close-btn">&times;</span>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
+  </div>
+
+  <!-- Lógica JavaScript -->
+  <script>
+    let scrollObserver = null;
+
+    function mostrarSeccion(seccionDestino) {
+      const vistas = {
+        'sobre-mi': document.getElementById('vista-sobre-mi'),
+        'trabajos': document.getElementById('vista-trabajos'),
+        'proyecto-esta-bien': document.getElementById('vista-proyecto-esta-bien'),
+        'proyecto-social-media': document.getElementById('vista-proyecto-social-media'),
+        'cv': document.getElementById('vista-cv')
+      };
+      const nav = document.getElementById('main-nav');
+      const botones = document.querySelectorAll('.nav-btn');
+
+      let vistaActual = null;
+      for (const key in vistas) {
+        if (vistas[key] && vistas[key].classList.contains('activa')) {
+          vistaActual = vistas[key];
+          break;
+        }
+      }
+
+      if (vistaActual === vistas[seccionDestino]) return;
+
+      if (vistaActual) {
+        vistaActual.classList.remove('activa');
+      }
+
+      if (seccionDestino === 'sobre-mi') {
+        document.body.style.backgroundColor = '#000FFF';
+        nav.classList.remove('visible');
+      } else {
+        document.body.style.backgroundColor = '#212121';
+      }
+
+      setTimeout(() => {
+        for (const key in vistas) {
+          if (vistas[key]) vistas[key].style.display = 'none';
+        }
+
+        botones.forEach(btn => btn.classList.remove('active'));
+
+        const destino = vistas[seccionDestino];
+        if (seccionDestino === 'sobre-mi') {
+          destino.style.display = 'flex';
+          nav.style.display = 'none';
+        } else {
+          destino.style.display = 'block';
+          nav.style.display = 'block';
+          setTimeout(() => nav.classList.add('visible'), 10);
+
+          if (seccionDestino === 'trabajos' || seccionDestino === 'proyecto-esta-bien' || seccionDestino === 'proyecto-social-media') {
+            botones[1].classList.add('active');
+          }
+          if (seccionDestino === 'cv') {
+            botones[2].classList.add('active');
+          }
+        }
+
+        window.scrollTo(0, 0);
+
+        setTimeout(() => {
+          destino.classList.add('activa');
+          
+          if (seccionDestino === 'proyecto-esta-bien' || seccionDestino === 'proyecto-social-media') {
+            activarScrollReveal();
+          }
+        }, 30);
+
+      }, 120);
+    }
+
+    // Scroll Reveal bidireccional suave (Solo para items dentro de .project-gallery-grid)
+    function activarScrollReveal() {
+      const items = document.querySelectorAll('.project-gallery-grid .gallery-item');
+      
+      if (scrollObserver) {
+        scrollObserver.disconnect();
+      }
+
+      scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: "0px 0px -40px 0px"
+      });
+
+      requestAnimationFrame(() => {
+        items.forEach(item => scrollObserver.observe(item));
+      });
+    }
+
+    function abrirModal(src) {
+      const modal = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      modal.style.display = 'flex';
+      setTimeout(() => {
+        modal.classList.add('open');
+      }, 10);
+    }
+
+    function cerrarModal() {
+      const modal = document.getElementById('lightbox');
+      modal.classList.remove('open');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 200);
+    }
+  </script>
+</body>
+</html>
