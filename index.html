@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dayana Alfaro | Portafolio</title>
 
+  <!-- FAVICON PERSONALIZADO (Icono de la pestaña) -->
+  <link rel="icon" type="image/png" href="iconsky-03.png">
+
   <!-- Fuente Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -285,7 +288,7 @@
     }
 
     /* =========================================
-       3. DETALLES DE PROYECTOS & CYLINDER
+       3. DETALLES DE PROYECTOS
        ========================================= */
     .btn-back {
       display: inline-flex;
@@ -378,7 +381,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       margin-bottom: 50px;
-      perspective: 1200px;
+      perspective: 1800px;
     }
 
     .cylinder-canvas-card {
@@ -390,7 +393,7 @@
       border: 1px solid #1f1f1f;
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
       cursor: zoom-in;
-      opacity: 1; /* Aparece limpia de inmediato sin deformar */
+      opacity: 1;
       will-change: transform;
       transform-origin: center center;
       transform-style: preserve-3d;
@@ -440,7 +443,7 @@
       align-items: center;
       gap: 50px;
       margin-top: 10px;
-      perspective: 1200px;
+      perspective: 1800px;
     }
 
     .cv-cylinder-card {
@@ -966,7 +969,7 @@
         document.body.style.backgroundColor = '#000000';
       }
 
-      // Reinicia transformación en reposo antes de abrir
+      // Reinicia transformaciones a plano
       document.querySelectorAll('.cylinder-canvas-card, .cv-cylinder-card').forEach(el => {
         el.style.transform = 'rotateX(0deg) skewY(0deg) translateZ(0px)';
       });
@@ -1080,7 +1083,7 @@
     requestAnimationFrame(animarCursor);
 
     /* =========================================
-       MOTOR CILÍNDRICO FLUIDO AL 15°
+       MOTOR CILINDRICO FLUIDO (MÁXIMO 15°)
        ========================================= */
     let lastScrollY = window.pageYOffset;
     let scrollVelocity = 0;
@@ -1093,7 +1096,7 @@
     }, { passive: true });
 
     function animarCilindroFluido() {
-      // Amortiguación suave
+      // Amortiguación elástica
       smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.14;
       scrollVelocity *= 0.84;
 
@@ -1104,14 +1107,14 @@
         const rect = card.getBoundingClientRect();
         
         if (rect.bottom >= -60 && rect.top <= windowH + 60) {
-          // Rotación máxima fijada en 15°
+          // Límite fijado en 15°
           const clampedRotateX = Math.max(-15, Math.min(15, smoothedVelocity * -0.32));
           
-          // Fuga sutil lateral
+          // Inclinación lateral
           const isLeftCol = rect.left < window.innerWidth / 2;
           const skewDeg = (smoothedVelocity * 0.04) * (isLeftCol ? 1 : -1);
           
-          // Profundidad z suave que arquea la tarjeta
+          // Profundidad Z
           const depthZ = -Math.abs(clampedRotateX) * 2.2;
 
           if (Math.abs(smoothedVelocity) > 0.05) {
