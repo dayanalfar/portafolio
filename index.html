@@ -10,9 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Three.js para curvatura cilíndrica WebGL real -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
   <style>
     * {
       box-sizing: border-box;
@@ -288,7 +285,7 @@
     }
 
     /* =========================================
-       3. DETALLES DE PROYECTOS & WEBGL CYLINDER
+       3. DETALLES DE PROYECTOS
        ========================================= */
     .btn-back {
       display: inline-flex;
@@ -381,29 +378,55 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       margin-bottom: 50px;
+      perspective: 1800px; /* Perspectiva profunda para evitar distorsión exagerada */
     }
 
-    /* CONTENEDOR WEBGL CILÍNDRICO REAL */
-    .cylinder-canvas-container {
+    .cylinder-canvas-card {
+      position: relative;
       width: 100%;
-      height: 480px;
       border-radius: 14px;
       overflow: hidden;
-      background-color: transparent;
+      background-color: #111111;
+      border: 1px solid #1f1f1f;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
       cursor: zoom-in;
-      position: relative;
-      transition: box-shadow 0.25s ease;
+      opacity: 0;
+      transform: translateY(35px) scale(0.98);
+      transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                  transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                  box-shadow 0.25s ease,
+                  border-color 0.3s ease;
+      will-change: transform;
+      transform-origin: center center;
     }
 
-    .cylinder-canvas-container canvas {
-      width: 100% !important;
-      height: 100% !important;
+    .cylinder-canvas-card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .cylinder-canvas-card:hover {
+      border-color: #000FFF;
+      box-shadow: 0 16px 36px rgba(0, 15, 255, 0.3);
+    }
+
+    .cylinder-canvas-card img {
+      width: 100%;
+      height: auto;
       display: block;
+      border-radius: 14px;
+      transition: transform 0.35s ease;
+    }
+
+    .cylinder-canvas-card:hover img {
+      transform: scale(1.02);
     }
 
     .related-projects-section {
       margin-top: 60px;
       padding-top: 30px;
+      opacity: 1 !important;
+      transform: none !important;
     }
 
     .related-title {
@@ -419,7 +442,7 @@
     }
 
     /* =========================================
-       4. VISTA: CV (CYLINDER WARP)
+       4. VISTA: CV
        ========================================= */
     .cv-container {
       max-width: 820px;
@@ -429,20 +452,31 @@
       align-items: center;
       gap: 50px;
       margin-top: 10px;
+      perspective: 1800px;
     }
 
-    .cv-cylinder-container {
+    .cv-cylinder-card {
+      display: block;
       width: 100%;
-      height: 1100px;
       cursor: zoom-in;
-      background-color: transparent;
+      background-color: #ffffff;
       border-radius: 6px;
       overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border: 1px solid #1f1f1f;
+      transition: box-shadow 0.25s ease, border-color 0.3s ease;
+      will-change: transform;
+      transform-origin: center center;
     }
 
-    .cv-cylinder-container canvas {
-      width: 100% !important;
-      height: 100% !important;
+    .cv-cylinder-card:hover {
+      box-shadow: 0 16px 36px rgba(0, 15, 255, 0.3);
+      border-color: #000FFF;
+    }
+
+    .cv-cylinder-card img {
+      width: 100%;
+      height: auto;
       display: block;
     }
 
@@ -595,12 +629,6 @@
       .trabajos-grid, .project-gallery-grid {
         grid-template-columns: 1fr;
       }
-      .cylinder-canvas-container {
-        height: 380px;
-      }
-      .cv-cylinder-container {
-        height: 520px;
-      }
       .related-grid {
         max-width: 100%;
       }
@@ -712,7 +740,7 @@
 
   </section>
 
-  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien - WebGL Cylinder) -->
+  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien) -->
   <section id="vista-proyecto-esta-bien" class="vista-pantalla seccion-oscura">
     
     <button class="btn-back" onclick="mostrarSeccion('trabajos')">
@@ -736,16 +764,36 @@
     </header>
 
     <div class="project-gallery-grid">
-      <div class="cylinder-canvas-container" data-src="postg-10.png" onclick="abrirModal('postg-10.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-09.png" onclick="abrirModal('postg-09.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-08.png" onclick="abrirModal('postg-08.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-01.png" onclick="abrirModal('postg-01.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-02.png" onclick="abrirModal('postg-02.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-03.png" onclick="abrirModal('postg-03.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-04.png" onclick="abrirModal('postg-04.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-05.png" onclick="abrirModal('postg-05.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-06.png" onclick="abrirModal('postg-06.png')"></div>
-      <div class="cylinder-canvas-container" data-src="postg-07.png" onclick="abrirModal('postg-07.png')"></div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-10.png')">
+        <img src="postg-10.png" alt="Lo que deberíamos llevar en la mochila">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-09.png')">
+        <img src="postg-09.png" alt="Nota perfecta y el proceso real">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-08.png')">
+        <img src="postg-08.png" alt="Estoy bien: lo que hay detrás">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-01.png')">
+        <img src="postg-01.png" alt="¿Por qué me siento tan cansada si solo estudio?">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-02.png')">
+        <img src="postg-02.png" alt="¿Cómo te sientes hoy realmente?">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-03.png')">
+        <img src="postg-03.png" alt="Mito vs Realidad: Agotamiento constante">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-04.png')">
+        <img src="postg-04.png" alt="Mitos vs Realidad: Bienestar emocional">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-05.png')">
+        <img src="postg-05.png" alt="Red de apoyo ante un examen difícil">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-06.png')">
+        <img src="postg-06.png" alt="El agotamiento no es normal: OFF / ON">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-07.png')">
+        <img src="postg-07.png" alt="Tu bienestar también se construye con pequeñas acciones">
+      </div>
     </div>
 
     <section class="related-projects-section">
@@ -775,7 +823,7 @@
 
   </section>
 
-  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB - WebGL Cylinder) -->
+  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB) -->
   <section id="vista-proyecto-social-media" class="vista-pantalla seccion-oscura">
     
     <button class="btn-back" onclick="mostrarSeccion('trabajos')">
@@ -800,23 +848,41 @@
 
     <h2 class="brand-section-title">TAYAZ</h2>
     <div class="project-gallery-grid">
-      <div class="cylinder-canvas-container" data-src="La foto de los jeans de Tayaz.png" onclick="abrirModal('La foto de los jeans de Tayaz.png')"></div>
-      <div class="cylinder-canvas-container" data-src="La foto de la chaqueta y bolso de Tayaz.png" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')"></div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('La foto de los jeans de Tayaz.png')">
+        <img src="La foto de los jeans de Tayaz.png" alt="Tayaz Jeans">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')">
+        <img src="La foto de la chaqueta y bolso de Tayaz.png" alt="Tayaz Closet Nueva Colección">
+      </div>
     </div>
 
     <h2 class="brand-section-title">KARA OK</h2>
     <div class="project-gallery-grid">
-      <div class="cylinder-canvas-container" data-src="POST COMERCIAL.png" onclick="abrirModal('POST COMERCIAL.png')"></div>
-      <div class="cylinder-canvas-container" data-src="karaokeoke.png" onclick="abrirModal('karaokeoke.png')"></div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('POST COMERCIAL.png')">
+        <img src="POST COMERCIAL.png" alt="Karaoke Night">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('karaokeoke.png')">
+        <img src="karaokeoke.png" alt="Top Canciones Karaoke">
+      </div>
     </div>
 
     <h2 class="brand-section-title">Jar Donuts</h2>
     <div class="project-gallery-grid">
-      <div class="cylinder-canvas-container" data-src="Foto 1 de Jar Donuts.png" onclick="abrirModal('Foto 1 de Jar Donuts.png')"></div>
-      <div class="cylinder-canvas-container" data-src="Foto 2 de Jar Donuts.png" onclick="abrirModal('Foto 2 de Jar Donuts.png')"></div>
-      <div class="cylinder-canvas-container" data-src="Foto 3 de Jar Donuts.png" onclick="abrirModal('Foto 3 de Jar Donuts.png')"></div>
-      <div class="cylinder-canvas-container" data-src="Foto 4 de Jar Donuts.png" onclick="abrirModal('Foto 4 de Jar Donuts.png')"></div>
-      <div class="cylinder-canvas-container" data-src="Foto 5 de Jar Donuts.png" onclick="abrirModal('Foto 5 de Jar Donuts.png')"></div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 1 de Jar Donuts.png')">
+        <img src="Foto 1 de Jar Donuts.png" alt="Compromiso con Cajamarca">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 2 de Jar Donuts.png')">
+        <img src="Foto 2 de Jar Donuts.png" alt="Compramos leche a pequeños productores">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 3 de Jar Donuts.png')">
+        <img src="Foto 3 de Jar Donuts.png" alt="Realizamos pagos constantes y justos">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 4 de Jar Donuts.png')">
+        <img src="Foto 4 de Jar Donuts.png" alt="Estabilidad económica familias ganaderas">
+      </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 5 de Jar Donuts.png')">
+        <img src="Foto 5 de Jar Donuts.png" alt="Conoce las historias detrás de cada donut">
+      </div>
     </div>
 
     <section class="related-projects-section">
@@ -846,12 +912,17 @@
 
   </section>
 
-  <!-- 5. Pantalla: CV (WebGL Cylinder) -->
+  <!-- 5. Pantalla: CV -->
   <section id="vista-cv" class="vista-pantalla seccion-oscura">
     
     <div class="cv-container">
-      <div class="cv-cylinder-container" data-src="Dayana Alfaro.CV.INGLES.png" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')"></div>
-      <div class="cv-cylinder-container" data-src="Dayana Alfaro.CV.png" onclick="abrirModal('Dayana Alfaro.CV.png')"></div>
+      <div class="cv-cylinder-card" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
+        <img src="Dayana Alfaro.CV.INGLES.png" alt="CV English">
+      </div>
+
+      <div class="cv-cylinder-card" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
+        <img src="Dayana Alfaro.CV.png" alt="CV Español">
+      </div>
     </div>
 
     <div class="social-footer">
@@ -871,8 +942,10 @@
     <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
   </div>
 
-  <!-- Lógica JavaScript & Motor WebGL 3D Cylinder Mesh -->
+  <!-- Lógica JavaScript & Motor Cilindro Calibrado y Suave -->
   <script>
+    let scrollObserver = null;
+
     function mostrarSeccion(seccionDestino) {
       const vistas = {
         'sobre-mi': document.getElementById('vista-sobre-mi'),
@@ -933,11 +1006,38 @@
 
         setTimeout(() => {
           destino.classList.add('activa');
-          // Actualiza dimensiones de los lienzos WebGL
-          window.dispatchEvent(new Event('resize'));
+          
+          if (seccionDestino === 'proyecto-esta-bien' || seccionDestino === 'proyecto-social-media') {
+            activarScrollReveal();
+          }
         }, 30);
 
       }, 120);
+    }
+
+    function activarScrollReveal() {
+      const items = document.querySelectorAll('.cylinder-canvas-card');
+      
+      if (scrollObserver) {
+        scrollObserver.disconnect();
+      }
+
+      scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: "0px 0px -40px 0px"
+      });
+
+      requestAnimationFrame(() => {
+        items.forEach(item => scrollObserver.observe(item));
+      });
     }
 
     function abrirModal(src) {
@@ -1013,45 +1113,8 @@
     requestAnimationFrame(animarCursor);
 
     /* =========================================
-       MOTOR WEBGL 3D CYLINDER MESH WARP
-       (Curva tridimensional continua por fragmentos)
+       MOTOR CILINDRICO SUAVE Y CONTROLADO
        ========================================= */
-    const vertexShader = `
-      varying vec2 vUv;
-      uniform float uCurvature;
-      uniform float uVelocity;
-
-      void main() {
-        vUv = uv;
-        vec3 pos = position;
-
-        // Curvatura Cilíndrica Real: arquea los vértices superior e inferior en Z
-        float normalizedY = pos.y; // centrado en 0
-        float curve = pow(normalizedY, 2.0) * (uCurvature + abs(uVelocity) * 0.0035);
-        
-        // Deformación del cilindro hacia el fondo
-        pos.z -= curve * 1.8;
-        
-        // Inclinación dinámica del arco según la velocidad del scroll
-        pos.y += curve * (uVelocity * 0.002);
-
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `;
-
-    const fragmentShader = `
-      varying vec2 vUv;
-      uniform sampler2D uTexture;
-      uniform float uBrightness;
-
-      void main() {
-        vec4 color = texture2D(uTexture, vUv);
-        // Sombreado 3D sutil para acentuar el cilindro
-        float edgeShade = 1.0 - pow(abs(vUv.y - 0.5) * 2.0, 2.8) * 0.22;
-        gl_FragColor = vec4(color.rgb * edgeShade, color.a);
-      }
-    `;
-
     let lastScrollY = window.pageYOffset;
     let scrollVelocity = 0;
     let smoothedVelocity = 0;
@@ -1062,97 +1125,40 @@
       lastScrollY = currentScrollY;
     }, { passive: true });
 
-    const webglInstances = [];
+    function animarCilindroSuave() {
+      // Suavizado elástico con amortiguación rápida
+      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.12;
+      scrollVelocity *= 0.82;
 
-    function initCylinderCanvases() {
-      const containers = document.querySelectorAll('.cylinder-canvas-container, .cv-cylinder-container');
-      const textureLoader = new THREE.TextureLoader();
-
-      containers.forEach(container => {
-        const imgSrc = container.getAttribute('data-src');
-        const width = container.clientWidth || 400;
-        const height = container.clientHeight || 480;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        camera.position.z = 2.4;
-
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        // Malla 3D subdividida con 32 segmentos verticales para lograr la curva perfecta
-        const geometry = new THREE.PlaneGeometry(1.7, 2.0, 16, 32);
-
-        const uniforms = {
-          uTexture: { value: textureLoader.load(imgSrc) },
-          uCurvature: { value: 0.18 },
-          uVelocity: { value: 0.0 }
-        };
-
-        const material = new THREE.ShaderMaterial({
-          vertexShader: vertexShader,
-          fragmentShader: fragmentShader,
-          uniforms: uniforms,
-          transparent: true
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        webglInstances.push({
-          container,
-          renderer,
-          scene,
-          camera,
-          uniforms
-        });
-      });
-    }
-
-    window.addEventListener('resize', () => {
-      webglInstances.forEach(item => {
-        const w = item.container.clientWidth;
-        const h = item.container.clientHeight;
-        if (w && h) {
-          item.camera.aspect = w / h;
-          item.camera.updateProjectionMatrix();
-          item.renderer.setSize(w, h);
-        }
-      });
-    });
-
-    function renderWebGLCylinders() {
-      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.14;
-      scrollVelocity *= 0.85;
-
+      const cards = document.querySelectorAll('.cylinder-canvas-card, .cv-cylinder-card');
       const windowH = window.innerHeight;
-      const midScreenY = windowH / 2;
 
-      webglInstances.forEach(item => {
-        const rect = item.container.getBoundingClientRect();
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
         
-        // Solo renderiza si está visible en el viewport
         if (rect.bottom >= -50 && rect.top <= windowH + 50) {
-          const centerY = rect.top + rect.height / 2;
-          const distFromCenter = (centerY - midScreenY) / midScreenY;
+          // Rotación sutil controlada (máximo 6 grados para evitar vueltas)
+          const clampedRotateX = Math.max(-6, Math.min(6, smoothedVelocity * -0.15));
+          
+          // Inclinación lateral mínima
+          const isLeftCol = rect.left < window.innerWidth / 2;
+          const skewDeg = (smoothedVelocity * 0.02) * (isLeftCol ? 1 : -1);
+          
+          // Profundidad Z sutil
+          const depthZ = -Math.abs(clampedRotateX) * 1.5;
 
-          // Curvatura dinámica del cilindro en base a la posición y velocidad
-          item.uniforms.uCurvature.value = 0.18 + Math.abs(distFromCenter) * 0.28;
-          item.uniforms.uVelocity.value = smoothedVelocity;
-
-          item.renderer.render(item.scene, item.camera);
+          if (Math.abs(smoothedVelocity) > 0.05) {
+            card.style.transform = `rotateX(${clampedRotateX.toFixed(2)}deg) skewY(${skewDeg.toFixed(2)}deg) translateZ(${depthZ.toFixed(1)}px)`;
+          } else {
+            card.style.transform = `rotateX(0deg) skewY(0deg) translateZ(0px)`;
+          }
         }
       });
 
-      requestAnimationFrame(renderWebGLCylinders);
+      requestAnimationFrame(animarCilindroSuave);
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      initCylinderCanvases();
-      renderWebGLCylinders();
-    });
+    requestAnimationFrame(animarCilindroSuave);
   </script>
 </body>
 </html>
