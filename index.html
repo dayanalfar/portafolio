@@ -35,7 +35,7 @@
       left: 0;
       width: 48px;
       height: auto;
-      pointer-events: none; /* Permite hacer clics a través de la imagen sin bloquear nada */
+      pointer-events: none;
       z-index: 999999;
       opacity: 0;
       transform: translate3d(-100px, -100px, 0);
@@ -46,7 +46,6 @@
     }
 
     @media (pointer: coarse) {
-      /* Se desactiva en móviles y pantallas táctiles */
       #cursor-follower {
         display: none !important;
       }
@@ -75,7 +74,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 60px 24px;
+      padding: 50px 24px;
     }
 
     .hero-container {
@@ -87,25 +86,25 @@
     }
 
     h1.hero-title {
-      font-size: 125px;
+      font-size: 110px;
       font-weight: 400;
       line-height: 1;
       letter-spacing: -0.07em;
-      margin-bottom: 35px;
+      margin-bottom: 28px;
       text-transform: lowercase;
     }
 
     .hero-bio {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 400;
-      line-height: 1.8;
+      line-height: 1.7;
       max-width: 820px;
-      margin-bottom: 45px;
+      margin-bottom: 35px;
       opacity: 0.95;
     }
 
     .hero-bio p {
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
     .btn-trabajos {
@@ -117,7 +116,7 @@
       color: #ffffff;
       background-color: #000FFF;
       border: 2px solid #ffffff;
-      padding: 14px 42px;
+      padding: 13px 40px;
       border-radius: 50px;
       cursor: pointer;
       will-change: transform, opacity;
@@ -136,6 +135,15 @@
 
     .btn-trabajos:active {
       transform: translateY(0) scale(1);
+    }
+
+    /* Iconos sociales en vista sobre mí */
+    .hero-social-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-top: 25px;
     }
 
     /* =========================================
@@ -457,7 +465,7 @@
     }
 
     /* =========================================
-       MODAL / LIGHTBOX
+       MODAL / LIGHTBOX (OPTIMIZADO PARA LECTURA)
        ========================================= */
     .lightbox-modal {
       display: none;
@@ -467,13 +475,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.92);
+      background-color: rgba(0, 0, 0, 0.94);
       justify-content: center;
       align-items: center;
       padding: 20px;
       cursor: zoom-out;
       opacity: 0;
       transition: opacity 0.25s ease;
+      overflow-y: auto; /* Permite desplazamiento en vertical si es largo */
     }
 
     .lightbox-modal.open {
@@ -494,18 +503,27 @@
     }
 
     .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 30px;
+      position: fixed;
+      top: 15px;
+      right: 20px;
       color: #ffffff;
-      font-size: 38px;
+      font-size: 40px;
       font-weight: 300;
       cursor: pointer;
-      transition: color 0.2s;
+      z-index: 1001;
+      background: rgba(0,0,0,0.4);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: color 0.2s, background-color 0.2s;
     }
 
     .close-btn:hover {
       color: #000FFF;
+      background: #ffffff;
     }
 
     /* =========================================
@@ -522,8 +540,8 @@
 
     .social-link {
       display: inline-block;
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
       will-change: transform, opacity;
       transform: translateZ(0);
@@ -543,16 +561,54 @@
       opacity: 0.85;
     }
 
+    /* =========================================
+       OPTIMIZACIÓN ESPECIAL PARA CELULARES
+       ========================================= */
     @media (max-width: 768px) {
-      h1.hero-title {
-        font-size: 55px;
-        letter-spacing: -0.04em;
+      #vista-sobre-mi {
+        padding: 30px 18px 25px 18px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
+
+      h1.hero-title {
+        font-size: 46px;
+        letter-spacing: -0.04em;
+        margin-bottom: 16px;
+      }
+
+      .hero-bio {
+        font-size: 13.5px;
+        line-height: 1.55;
+        margin-bottom: 24px;
+      }
+
+      .hero-bio p {
+        margin-bottom: 10px;
+      }
+
+      .btn-trabajos {
+        font-size: 14px;
+        padding: 11px 32px;
+      }
+
+      .hero-social-footer {
+        margin-top: 20px;
+        gap: 16px;
+      }
+
+      .social-link {
+        width: 40px;
+        height: 40px;
+      }
+
       .project-header h1 {
-        font-size: 36px;
+        font-size: 32px;
       }
       .brand-section-title {
-        font-size: 26px;
+        font-size: 24px;
       }
       .trabajos-grid, .project-gallery-grid {
         grid-template-columns: 1fr;
@@ -561,20 +617,33 @@
         max-width: 100%;
       }
       .nav-container {
-        padding: 20px;
+        padding: 16px 20px;
       }
       .seccion-oscura {
-        padding: 20px 20px 60px 20px;
+        padding: 15px 16px 50px 16px;
       }
       .cv-container {
-        gap: 30px;
+        gap: 25px;
+      }
+
+      /* Vista ampliada de imágenes y CV en celular */
+      .lightbox-modal {
+        padding: 45px 8px 20px 8px;
+        align-items: flex-start; /* Permite leer desde el inicio superior */
+      }
+
+      .lightbox-img {
+        max-width: 100%;
+        max-height: none; /* Permite que ocupe todo el ancho para zoom nítido */
+        width: 100%;
+        height: auto;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Imagen del conejito con su nombre exacto -->
+  <!-- Imagen del conejito seguidor de cursor -->
   <img id="cursor-follower" src="iconsky-03.png" alt="Conejo Follower">
 
   <!-- Barra de navegación -->
@@ -604,6 +673,16 @@
       </div>
 
       <button class="btn-trabajos" onclick="mostrarSeccion('trabajos')">Ver trabajos</button>
+
+      <!-- Iconos de Redes Sociales en la pantalla de inicio -->
+      <div class="hero-social-footer">
+        <a href="https://www.behance.net/dayanaalfaro4" target="_blank" rel="noopener noreferrer" class="social-link" title="Behance">
+          <img src="ICONS-01.png" alt="Behance">
+        </a>
+        <a href="https://www.linkedin.com/in/dayana-alfaro-a690a5428/" target="_blank" rel="noopener noreferrer" class="social-link" title="LinkedIn">
+          <img src="ICONS-02.png" alt="LinkedIn">
+        </a>
+      </div>
     </main>
   </section>
 
@@ -1010,11 +1089,9 @@
       const targetX = mouseX + OFFSET_X;
       const targetY = mouseY + OFFSET_Y;
 
-      // Suavizado suave
       currentX += (targetX - currentX) * 0.15;
       currentY += (targetY - currentY) * 0.15;
 
-      // Límite de distancia
       const dx = currentX - mouseX;
       const dy = currentY - mouseY;
       const dist = Math.hypot(dx, dy);
