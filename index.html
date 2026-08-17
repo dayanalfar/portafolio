@@ -24,25 +24,27 @@
       background-color: #000FFF;
       transition: background-color 0.25s ease;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* =========================================
-       CANVAS DE DISTORSIÓN WEBGL (PARTE INFERIOR)
+       CANVAS WEBGL: SCROLL CURL EFFECT (BASE)
        ========================================= */
-    #webgl-distortion {
+    #webgl-curl-canvas {
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100vw;
-      height: 25vh; /* Abarca el cuarto inferior de la pantalla */
+      height: 12vh; /* Altura del pliegue/rizo en la base */
       pointer-events: none;
-      z-index: 999;
+      z-index: 9999; /* Por encima de todo el contenido */
       opacity: 0;
       transition: opacity 0.4s ease;
-      backdrop-filter: blur(1px);
+      will-change: transform;
     }
 
-    #webgl-distortion.activo {
+    /* Solo activo en secciones oscuras */
+    #webgl-curl-canvas.activo {
       opacity: 1;
     }
 
@@ -216,7 +218,7 @@
     .seccion-oscura {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 50px 80px 50px;
+      padding: 20px 50px 120px 50px; /* Margen inferior extra para el Curl */
     }
 
     .trabajos-grid {
@@ -489,7 +491,7 @@
     .lightbox-modal {
       display: none;
       position: fixed;
-      z-index: 1000;
+      z-index: 100000;
       top: 0;
       left: 0;
       width: 100%;
@@ -529,7 +531,7 @@
       font-size: 40px;
       font-weight: 300;
       cursor: pointer;
-      z-index: 1001;
+      z-index: 100100;
       background: rgba(0,0,0,0.4);
       width: 44px;
       height: 44px;
@@ -639,7 +641,7 @@
         padding: 16px 20px;
       }
       .seccion-oscura {
-        padding: 15px 16px 50px 16px;
+        padding: 15px 16px 80px 16px; /* Ajuste margen inferior celular */
       }
       .cv-container {
         gap: 25px;
@@ -656,13 +658,18 @@
         width: 100%;
         height: auto;
       }
+      
+      /* Ajuste altura Curl en celular */
+      #webgl-curl-canvas {
+        height: 10vh;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Canvas WebGL para efecto de distorsión líquida inferior -->
-  <canvas id="webgl-distortion"></canvas>
+  <!-- Canvas WebGL: Scroll Curl Effect (Fijo en la base) -->
+  <canvas id="webgl-curl-canvas"></canvas>
 
   <!-- Imagen del conejito seguidor de cursor -->
   <img id="cursor-follower" src="iconsky-03.png" alt="Conejo Follower">
@@ -948,7 +955,7 @@
     <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
   </div>
 
-  <!-- Lógica JavaScript & Shader WebGL -->
+  <!-- Lógica JavaScript y WebGL Curl Shader -->
   <script>
     let scrollObserver = null;
 
@@ -962,7 +969,7 @@
       };
       const nav = document.getElementById('main-nav');
       const botones = document.querySelectorAll('.nav-btn');
-      const distortionCanvas = document.getElementById('webgl-distortion');
+      const curlCanvas = document.getElementById('webgl-curl-canvas');
 
       let vistaActual = null;
       for (const key in vistas) {
@@ -1009,11 +1016,11 @@
           }
         }
 
-        // Activa la distorsión WebGL en las secciones de proyectos y CV
-        if (seccionDestino === 'proyecto-esta-bien' || seccionDestino === 'proyecto-social-media' || seccionDestino === 'cv') {
-          distortionCanvas.classList.add('activo');
+        // Activa el efecto Curl WebGL solo en secciones oscuras
+        if (seccionDestino !== 'sobre-mi') {
+          curlCanvas.classList.add('activo');
         } else {
-          distortionCanvas.classList.remove('activo');
+          curlCanvas.classList.remove('activo');
         }
 
         window.scrollTo(0, 0);
@@ -1127,49 +1134,75 @@
     requestAnimationFrame(animarCursor);
 
     /* =========================================
-       MOTOR WEBGL DISTORTION SHADER (INFERIOR)
+       MOTOR WEBGL SCROLL CURL SHADER (BASE)
        ========================================= */
-    (function initWebGLDistortion() {
-      const canvas = document.getElementById('webgl-distortion');
+    (function initWebGLCurlEffect() {
+      const canvas = document.getElementById('webgl-curl-canvas');
       const gl = canvas.getContext('webgl');
       if (!gl) return;
 
+      let curlIntensity = 0; // Intensidad del pliegue (0 a 1)
+
       function resize() {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight * 0.25;
+        // Altura fija del canvas (corresponde a 12vh en CSS)
+        canvas.height = window.innerHeight * (window.innerWidth <= 768 ? 0.10 : 0.12);
         gl.viewport(0, 0, canvas.width, canvas.height);
       }
       window.addEventListener('resize', resize);
       resize();
 
+      // Shader de Vértices: Define la posición plana del canvas
       const vsSource = `
         attribute vec2 position;
         varying vec2 vUv;
         void main() {
-          vUv = (position + 1.0) * 0.5;
+          vUv = (position + 1.0) * 0.5; // Coordenadas UV de 0 a 1
           gl_Position = vec4(position, 0.0, 1.0);
         }
       `;
 
+      // Shader de Fragmentos: Recrea visualmente el pliegue 3D y el sombreado
       const fsSource = `
         precision mediump float;
         varying vec2 vUv;
         uniform float uTime;
+        uniform float uCurlIntensity; // Intensidad calibrada por el scroll
         uniform vec2 uResolution;
 
         void main() {
           vec2 uv = vUv;
-          // Ondulación de distorsión líquida
-          float wave = sin(uv.x * 12.0 + uTime * 2.5) * cos(uv.y * 8.0 + uTime * 1.5) * 0.04;
-          float mask = smoothstep(1.0, 0.0, uv.y); // Más intenso en la base
           
-          vec3 darkColor = vec3(0.13, 0.13, 0.13); // Tono acorde al fondo oscuro #212121
-          vec3 blueTint = vec3(0.0, 0.06, 1.0);   // Tono azul eléctrico sutil
+          // Fondo oscuro base de las secciones (#212121)
+          vec3 darkColor = vec3(0.13, 0.13, 0.13);
+          // Color azul del pliegue (un tono más claro para simular refracción)
+          vec3 blueFoldColor = vec3(0.0, 0.25, 1.0); 
+
+          // 1. Efecto de Deformación del rizo/pergamino
+          // Calculamos una onda que simula la curvatura del papel en la base.
+          // La intensidad controla cuánto se 'enrolla'.
+          float curveHeight = 0.5; // Altura relativa máxima de la curva
+          float deformation = sin(uv.y * 3.14159 * 0.85) * (uCurlIntensity * curveHeight);
           
-          vec3 color = mix(darkColor, blueTint, abs(wave) * 4.0);
-          float alpha = mask * (0.35 + abs(wave) * 2.0);
+          // Sincronizamos una onda horizontal sutil con el tiempo y el scroll
+          deformation += sin(uv.x * 6.0 + uTime * 0.8) * (uCurlIntensity * 0.015);
+
+          // 2. Efecto de Sombreado (Shading) del pliegue
+          // Simula cómo la luz incide en el papel enrollado, creando una sombra interior.
+          float shade = smoothstep(0.0, 0.35, uv.y + deformation); // Sombra en el interior del rizo
+          shade *= smoothstep(1.0, 0.7, uv.y + deformation);      // Brillo en el borde exterior
           
-          gl_FragColor = vec4(color, alpha);
+          // Mezclamos el color oscuro con el azul basado en la deformación y el shading
+          vec3 finalColor = mix(darkColor, blueFoldColor, deformation * 2.5);
+          
+          // Aplicamos el sombreado 3D
+          finalColor *= (0.6 + shade * 0.5);
+
+          // 3. Opacidad (Alpha)
+          // Hacemos que sea más opaco donde hay pliegue y transparente en la base pura.
+          float alpha = smoothstep(0.0, 0.15, deformation) * uCurlIntensity;
+
+          gl_FragColor = vec4(finalColor, alpha);
         }
       `;
 
@@ -1199,15 +1232,37 @@
 
       const uTimeLoc = gl.getUniformLocation(program, 'uTime');
       const uResLoc = gl.getUniformLocation(program, 'uResolution');
+      const uCurlLoc = gl.getUniformLocation(program, 'uCurlIntensity');
 
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+      // Listener de Scroll para controlar la intensidad del Curl
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        
+        // Calculamos cuánto ha hecho scroll (0 a 1)
+        const scrollFraction = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+        
+        // Mapeamos el scroll a la intensidad del Curl con un ligero "lag" elástico
+        // Se intensifica un poco más hacia el final.
+        curlIntensity = Math.min(1.0, scrollFraction * 1.5 + Math.sin(scrollFraction * 3.14) * 0.2);
+      });
+
       let startTime = performance.now();
+      let currentIntensity = 0;
+
       function render() {
         const time = (performance.now() - startTime) * 0.001;
+        
+        // Interpolación suave para la intensidad (Efecto resorte suave)
+        currentIntensity += (curlIntensity - currentIntensity) * 0.08;
+
         gl.uniform1f(uTimeLoc, time);
         gl.uniform2f(uResLoc, canvas.width, canvas.height);
+        gl.uniform1f(uCurlLoc, currentIntensity); // Pasamos la intensidad suave al shader
+        
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         requestAnimationFrame(render);
       }
