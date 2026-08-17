@@ -23,6 +23,33 @@
       color: #ffffff;
       background-color: #000FFF;
       transition: background-color 0.25s ease;
+      overflow-x: hidden;
+    }
+
+    /* =========================================
+       CURSOR PERSONALIZADO (CONEJITO)
+       ========================================= */
+    #cursor-follower {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 48px;
+      height: auto;
+      pointer-events: none; /* Permite hacer clics a través de la imagen sin bloquear nada */
+      z-index: 999999;
+      opacity: 0;
+      transform: translate3d(-100px, -100px, 0);
+      transition: opacity 0.3s ease;
+      will-change: transform;
+      user-select: none;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    }
+
+    @media (pointer: coarse) {
+      /* Se desactiva en móviles y pantallas táctiles */
+      #cursor-follower {
+        display: none !important;
+      }
     }
 
     /* =========================================
@@ -97,7 +124,7 @@
       transform: translateZ(0);
       transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1), 
                   background-color 0.2s ease, 
-                  color 0.2s ease,
+                  color 0.2s ease, 
                   box-shadow 0.2s ease;
     }
 
@@ -219,7 +246,7 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      opacity: 1 !important; /* Siempre visible de inmediato */
+      opacity: 1 !important;
       transform-origin: center center;
       will-change: transform;
       backface-visibility: hidden;
@@ -343,7 +370,6 @@
       margin-bottom: 50px;
     }
 
-    /* SCROLL REVEAL BIDIRECCIONAL FLUIDO (SOLO PARA GALERÍAS) */
     .gallery-item {
       width: 100%;
       border-radius: 12px;
@@ -376,7 +402,6 @@
       transition: transform 0.35s ease;
     }
 
-    /* SECCIÓN TAMBIÉN TE PUEDE INTERESAR (SIEMPRE VISIBLE DE INMEDIATO) */
     .related-projects-section {
       margin-top: 60px;
       padding-top: 30px;
@@ -397,7 +422,7 @@
     }
 
     /* =========================================
-       4. VISTA: CV (HOJAS LIMPIAS VERTICALES)
+       4. VISTA: CV
        ========================================= */
     .cv-container {
       max-width: 820px;
@@ -432,7 +457,7 @@
     }
 
     /* =========================================
-       MODAL / LIGHTBOX PARA CV Y GALERÍA
+       MODAL / LIGHTBOX
        ========================================= */
     .lightbox-modal {
       display: none;
@@ -548,6 +573,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Imagen del conejito con su nombre exacto -->
+  <img id="cursor-follower" src="iconsky-03.png" alt="Conejo Follower">
 
   <!-- Barra de navegación -->
   <nav class="nav-container" id="main-nav">
@@ -677,7 +705,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: TAMBIÉN TE PUEDE INTERESAR (Carga instantánea) -->
+    <!-- SECCIÓN: TAMBIÉN TE PUEDE INTERESAR -->
     <section class="related-projects-section">
       <h2 class="related-title">También te puede interesar</h2>
       
@@ -771,7 +799,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN: TAMBIÉN TE PUEDE INTERESAR (Carga instantánea) -->
+    <!-- SECCIÓN: TAMBIÉN TE PUEDE INTERESAR -->
     <section class="related-projects-section">
       <h2 class="related-title">También te puede interesar</h2>
       
@@ -800,16 +828,14 @@
 
   </section>
 
-  <!-- 5. Pantalla: CV (Inglés primero, Español después) -->
+  <!-- 5. Pantalla: CV -->
   <section id="vista-cv" class="vista-pantalla seccion-oscura">
     
     <div class="cv-container">
-      <!-- 1. Inglés -->
       <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
         <img src="Dayana Alfaro.CV.INGLES.png" alt="CV English" class="cv-hoja-img">
       </div>
 
-      <!-- 2. Español -->
       <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
         <img src="Dayana Alfaro.CV.png" alt="CV Español" class="cv-hoja-img">
       </div>
@@ -827,7 +853,7 @@
 
   </section>
 
-  <!-- Ventana Modal de aumento para CV y Galerías -->
+  <!-- Ventana Modal Lightbox -->
   <div id="lightbox" class="lightbox-modal" onclick="cerrarModal()">
     <span class="close-btn">&times;</span>
     <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
@@ -906,7 +932,6 @@
       }, 120);
     }
 
-    // Scroll Reveal bidireccional suave (Solo para items dentro de .project-gallery-grid)
     function activarScrollReveal() {
       const items = document.querySelectorAll('.project-gallery-grid .gallery-item');
       
@@ -949,6 +974,62 @@
         modal.style.display = 'none';
       }, 200);
     }
+
+    /* =========================================
+       SEGUIDOR DE CURSOR SUAVE (CONEJITO)
+       ========================================= */
+    const cursor = document.getElementById('cursor-follower');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let currentX = mouseX;
+    let currentY = mouseY;
+    let isMoving = false;
+
+    const OFFSET_X = 18;
+    const OFFSET_Y = 18;
+    const MAX_LAG_DIST = 85;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isMoving) {
+        cursor.style.opacity = '1';
+        isMoving = true;
+      }
+    });
+
+    window.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '0';
+    });
+
+    window.addEventListener('mouseenter', () => {
+      cursor.style.opacity = '1';
+    });
+
+    function animarCursor() {
+      const targetX = mouseX + OFFSET_X;
+      const targetY = mouseY + OFFSET_Y;
+
+      // Suavizado suave
+      currentX += (targetX - currentX) * 0.15;
+      currentY += (targetY - currentY) * 0.15;
+
+      // Límite de distancia
+      const dx = currentX - mouseX;
+      const dy = currentY - mouseY;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist > MAX_LAG_DIST) {
+        const angle = Math.atan2(dy, dx);
+        currentX = mouseX + Math.cos(angle) * MAX_LAG_DIST;
+        currentY = mouseY + Math.sin(angle) * MAX_LAG_DIST;
+      }
+
+      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      requestAnimationFrame(animarCursor);
+    }
+
+    requestAnimationFrame(animarCursor);
   </script>
 </body>
 </html>
