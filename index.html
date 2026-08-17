@@ -28,27 +28,6 @@
     }
 
     /* =========================================
-       CANVAS WEBGL: SCROLL CURL EFFECT (BASE)
-       ========================================= */
-    #webgl-curl-canvas {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100vw;
-      height: 12vh; /* Altura del pliegue/rizo en la base */
-      pointer-events: none;
-      z-index: 9999; /* Por encima de todo el contenido */
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      will-change: transform;
-    }
-
-    /* Solo activo en secciones oscuras */
-    #webgl-curl-canvas.activo {
-      opacity: 1;
-    }
-
-    /* =========================================
        CURSOR PERSONALIZADO (CONEJITO)
        ========================================= */
     #cursor-follower {
@@ -186,9 +165,10 @@
 
     .nav-box {
       display: inline-flex;
-      background-color: #000000;
+      background-color: #111111;
       padding: 12px 28px;
       border-radius: 40px;
+      border: 1px solid #222222;
       gap: 25px;
     }
 
@@ -213,12 +193,12 @@
     }
 
     /* =========================================
-       2. VISTA: TRABAJOS (#212121)
+       2. VISTA: TRABAJOS (FONDO NEGRO PURO #000000)
        ========================================= */
     .seccion-oscura {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 50px 120px 50px; /* Margen inferior extra para el Curl */
+      padding: 20px 50px 80px 50px;
     }
 
     .trabajos-grid {
@@ -229,14 +209,14 @@
     }
 
     .card-proyecto {
-      background-color: #3b3b3b;
+      background-color: #141414;
       border-radius: 16px;
       overflow: hidden;
       cursor: pointer;
       text-decoration: none;
       color: #ffffff;
       display: block;
-      border: 1px solid #4a4a4a;
+      border: 1px solid #242424;
       will-change: transform, box-shadow;
       transform: translateZ(0);
       transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
@@ -264,7 +244,7 @@
       height: 280px;
       overflow: hidden;
       position: relative;
-      background-color: #1a1a1a;
+      background-color: #0d0d0d;
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
       transform: translateZ(0);
@@ -299,20 +279,20 @@
     }
 
     .card-info p {
-      color: #e0e0e0;
+      color: #a0a0a0;
       font-size: 14px;
       font-weight: 400;
     }
 
     /* =========================================
-       3. DETALLES DE PROYECTOS
+       3. DETALLES DE PROYECTOS & WARP GALLERIES
        ========================================= */
     .btn-back {
       display: inline-flex;
       align-items: center;
       padding: 8px 20px;
-      background-color: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      background-color: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 30px;
       color: #ffffff;
       font-size: 13px;
@@ -342,7 +322,7 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       padding-bottom: 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       margin-bottom: 15px;
     }
 
@@ -353,14 +333,14 @@
       font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #e0e0e0;
+      color: #a0a0a0;
       margin-bottom: 16px;
       font-weight: 500;
     }
 
     .project-description {
       font-size: 14px;
-      color: #cccccc;
+      color: #b0b0b0;
       line-height: 1.6;
       max-width: 850px;
       margin-bottom: 22px;
@@ -374,7 +354,8 @@
     }
 
     .tag-badge {
-      background-color: #111111;
+      background-color: #141414;
+      border: 1px solid #282828;
       padding: 6px 14px;
       border-radius: 6px;
       font-size: 11px;
@@ -397,21 +378,30 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       margin-bottom: 50px;
+      perspective: 1000px;
+    }
+
+    /* EFECTO WARP DRIVEN POR SCROLL VELOCITY */
+    .warp-target {
+      will-change: transform, filter;
+      transition: transform 0.1s cubic-bezier(0.1, 0.9, 0.2, 1), filter 0.3s ease;
+      transform-origin: center center;
     }
 
     .gallery-item {
       width: 100%;
       border-radius: 12px;
       overflow: hidden;
-      background-color: #1a1a1a;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      background-color: #111111;
+      border: 1px solid #1f1f1f;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
       cursor: zoom-in;
       opacity: 0;
       transform: translateY(35px) scale(0.98);
       transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
                   transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-                  box-shadow 0.25s ease;
-      will-change: opacity, transform;
+                  box-shadow 0.25s ease,
+                  border-color 0.3s ease;
     }
 
     .gallery-item.visible {
@@ -420,8 +410,8 @@
     }
 
     .gallery-item:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+      border-color: #000FFF;
+      box-shadow: 0 16px 36px rgba(0, 15, 255, 0.25);
     }
 
     .gallery-item img {
@@ -429,6 +419,10 @@
       height: auto;
       display: block;
       transition: transform 0.35s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.03);
     }
 
     .related-projects-section {
@@ -451,7 +445,7 @@
     }
 
     /* =========================================
-       4. VISTA: CV
+       4. VISTA: CV (WARP ACTIVO)
        ========================================= */
     .cv-container {
       max-width: 820px;
@@ -461,22 +455,24 @@
       align-items: center;
       gap: 50px;
       margin-top: 10px;
+      perspective: 1000px;
     }
 
     .cv-hoja-link {
       display: block;
       width: 100%;
       cursor: zoom-in;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transition: box-shadow 0.25s ease, border-color 0.3s ease;
       background-color: #ffffff;
       border-radius: 4px;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      border: 1px solid #1f1f1f;
     }
 
     .cv-hoja-link:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 16px 36px rgba(0, 15, 255, 0.3);
+      border-color: #000FFF;
     }
 
     .cv-hoja-img {
@@ -496,7 +492,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.94);
+      background-color: rgba(0, 0, 0, 0.96);
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -532,7 +528,7 @@
       font-weight: 300;
       cursor: pointer;
       z-index: 100100;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.6);
       width: 44px;
       height: 44px;
       display: flex;
@@ -641,7 +637,7 @@
         padding: 16px 20px;
       }
       .seccion-oscura {
-        padding: 15px 16px 80px 16px; /* Ajuste margen inferior celular */
+        padding: 15px 16px 60px 16px;
       }
       .cv-container {
         gap: 25px;
@@ -658,18 +654,10 @@
         width: 100%;
         height: auto;
       }
-      
-      /* Ajuste altura Curl en celular */
-      #webgl-curl-canvas {
-        height: 10vh;
-      }
     }
   </style>
 </head>
 <body>
-
-  <!-- Canvas WebGL: Scroll Curl Effect (Fijo en la base) -->
-  <canvas id="webgl-curl-canvas"></canvas>
 
   <!-- Imagen del conejito seguidor de cursor -->
   <img id="cursor-follower" src="iconsky-03.png" alt="Conejo Follower">
@@ -713,7 +701,7 @@
     </main>
   </section>
 
-  <!-- 2. Pantalla: Trabajos (Fondo #212121) -->
+  <!-- 2. Pantalla: Trabajos (FONDO NEGRO PURO #000000) -->
   <section id="vista-trabajos" class="vista-pantalla seccion-oscura">
     
     <div class="trabajos-grid">
@@ -753,7 +741,7 @@
 
   </section>
 
-  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien) -->
+  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien - Warp Effect) -->
   <section id="vista-proyecto-esta-bien" class="vista-pantalla seccion-oscura">
     
     <button class="btn-back" onclick="mostrarSeccion('trabajos')">
@@ -777,34 +765,34 @@
     </header>
 
     <div class="project-gallery-grid">
-      <div class="gallery-item" onclick="abrirModal('postg-10.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-10.png')">
         <img src="postg-10.png" alt="Lo que deberíamos llevar en la mochila">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-09.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-09.png')">
         <img src="postg-09.png" alt="Nota perfecta y el proceso real">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-08.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-08.png')">
         <img src="postg-08.png" alt="Estoy bien: lo que hay detrás">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-01.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-01.png')">
         <img src="postg-01.png" alt="¿Por qué me siento tan cansada si solo estudio?">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-02.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-02.png')">
         <img src="postg-02.png" alt="¿Cómo te sientes hoy realmente?">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-03.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-03.png')">
         <img src="postg-03.png" alt="Mito vs Realidad: Agotamiento constante">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-04.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-04.png')">
         <img src="postg-04.png" alt="Mitos vs Realidad: Bienestar emocional">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-05.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-05.png')">
         <img src="postg-05.png" alt="Red de apoyo ante un examen difícil">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-06.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-06.png')">
         <img src="postg-06.png" alt="El agotamiento no es normal: OFF / ON">
       </div>
-      <div class="gallery-item" onclick="abrirModal('postg-07.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('postg-07.png')">
         <img src="postg-07.png" alt="Tu bienestar también se construye con pequeñas acciones">
       </div>
     </div>
@@ -836,7 +824,7 @@
 
   </section>
 
-  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB) -->
+  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB - Warp Effect) -->
   <section id="vista-proyecto-social-media" class="vista-pantalla seccion-oscura">
     
     <button class="btn-back" onclick="mostrarSeccion('trabajos')">
@@ -861,39 +849,39 @@
 
     <h2 class="brand-section-title">TAYAZ</h2>
     <div class="project-gallery-grid">
-      <div class="gallery-item" onclick="abrirModal('La foto de los jeans de Tayaz.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('La foto de los jeans de Tayaz.png')">
         <img src="La foto de los jeans de Tayaz.png" alt="Tayaz Jeans">
       </div>
-      <div class="gallery-item" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')">
         <img src="La foto de la chaqueta y bolso de Tayaz.png" alt="Tayaz Closet Nueva Colección">
       </div>
     </div>
 
     <h2 class="brand-section-title">KARA OK</h2>
     <div class="project-gallery-grid">
-      <div class="gallery-item" onclick="abrirModal('POST COMERCIAL.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('POST COMERCIAL.png')">
         <img src="POST COMERCIAL.png" alt="Karaoke Night">
       </div>
-      <div class="gallery-item" onclick="abrirModal('karaokeoke.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('karaokeoke.png')">
         <img src="karaokeoke.png" alt="Top Canciones Karaoke">
       </div>
     </div>
 
     <h2 class="brand-section-title">Jar Donuts</h2>
     <div class="project-gallery-grid">
-      <div class="gallery-item" onclick="abrirModal('Foto 1 de Jar Donuts.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('Foto 1 de Jar Donuts.png')">
         <img src="Foto 1 de Jar Donuts.png" alt="Compromiso con Cajamarca">
       </div>
-      <div class="gallery-item" onclick="abrirModal('Foto 2 de Jar Donuts.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('Foto 2 de Jar Donuts.png')">
         <img src="Foto 2 de Jar Donuts.png" alt="Compramos leche a pequeños productores">
       </div>
-      <div class="gallery-item" onclick="abrirModal('Foto 3 de Jar Donuts.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('Foto 3 de Jar Donuts.png')">
         <img src="Foto 3 de Jar Donuts.png" alt="Realizamos pagos constantes y justos">
       </div>
-      <div class="gallery-item" onclick="abrirModal('Foto 4 de Jar Donuts.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('Foto 4 de Jar Donuts.png')">
         <img src="Foto 4 de Jar Donuts.png" alt="Estabilidad económica familias ganaderas">
       </div>
-      <div class="gallery-item" onclick="abrirModal('Foto 5 de Jar Donuts.png')">
+      <div class="gallery-item warp-target" onclick="abrirModal('Foto 5 de Jar Donuts.png')">
         <img src="Foto 5 de Jar Donuts.png" alt="Conoce las historias detrás de cada donut">
       </div>
     </div>
@@ -925,15 +913,15 @@
 
   </section>
 
-  <!-- 5. Pantalla: CV -->
+  <!-- 5. Pantalla: CV (Warp Effect) -->
   <section id="vista-cv" class="vista-pantalla seccion-oscura">
     
     <div class="cv-container">
-      <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
+      <div class="cv-hoja-link warp-target" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
         <img src="Dayana Alfaro.CV.INGLES.png" alt="CV English" class="cv-hoja-img">
       </div>
 
-      <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
+      <div class="cv-hoja-link warp-target" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
         <img src="Dayana Alfaro.CV.png" alt="CV Español" class="cv-hoja-img">
       </div>
     </div>
@@ -955,7 +943,7 @@
     <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
   </div>
 
-  <!-- Lógica JavaScript y WebGL Curl Shader -->
+  <!-- Lógica JavaScript & Scroll Velocity Warp Engine -->
   <script>
     let scrollObserver = null;
 
@@ -969,7 +957,6 @@
       };
       const nav = document.getElementById('main-nav');
       const botones = document.querySelectorAll('.nav-btn');
-      const curlCanvas = document.getElementById('webgl-curl-canvas');
 
       let vistaActual = null;
       for (const key in vistas) {
@@ -985,11 +972,12 @@
         vistaActual.classList.remove('activa');
       }
 
+      // Cambio de fondo: Azul para inicio, Negro puro para el resto
       if (seccionDestino === 'sobre-mi') {
         document.body.style.backgroundColor = '#000FFF';
         nav.classList.remove('visible');
       } else {
-        document.body.style.backgroundColor = '#212121';
+        document.body.style.backgroundColor = '#000000';
       }
 
       setTimeout(() => {
@@ -1014,13 +1002,6 @@
           if (seccionDestino === 'cv') {
             botones[2].classList.add('active');
           }
-        }
-
-        // Activa el efecto Curl WebGL solo en secciones oscuras
-        if (seccionDestino !== 'sobre-mi') {
-          curlCanvas.classList.add('activo');
-        } else {
-          curlCanvas.classList.remove('activo');
         }
 
         window.scrollTo(0, 0);
@@ -1134,140 +1115,43 @@
     requestAnimationFrame(animarCursor);
 
     /* =========================================
-       MOTOR WEBGL SCROLL CURL SHADER (BASE)
+       SCROLL VELOCITY WARP ENGINE
+       (Aplica deformación en proyectos y CV al scrollear)
        ========================================= */
-    (function initWebGLCurlEffect() {
-      const canvas = document.getElementById('webgl-curl-canvas');
-      const gl = canvas.getContext('webgl');
-      if (!gl) return;
+    let lastScrollY = window.pageYOffset;
+    let scrollVelocity = 0;
+    let smoothedVelocity = 0;
 
-      let curlIntensity = 0; // Intensidad del pliegue (0 a 1)
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.pageYOffset;
+      scrollVelocity = currentScrollY - lastScrollY;
+      lastScrollY = currentScrollY;
+    }, { passive: true });
 
-      function resize() {
-        canvas.width = window.innerWidth;
-        // Altura fija del canvas (corresponde a 12vh en CSS)
-        canvas.height = window.innerHeight * (window.innerWidth <= 768 ? 0.10 : 0.12);
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-      window.addEventListener('resize', resize);
-      resize();
+    function animarWarpEffect() {
+      // Suavizado elástico de la velocidad
+      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.12;
+      scrollVelocity *= 0.88; // Fricción
 
-      // Shader de Vértices: Define la posición plana del canvas
-      const vsSource = `
-        attribute vec2 position;
-        varying vec2 vUv;
-        void main() {
-          vUv = (position + 1.0) * 0.5; // Coordenadas UV de 0 a 1
-          gl_Position = vec4(position, 0.0, 1.0);
+      // Límite de distorsión
+      const clampedVelocity = Math.max(-28, Math.min(28, smoothedVelocity));
+      const skewAngle = clampedVelocity * 0.18;
+      const scaleY = 1 + Math.abs(clampedVelocity) * 0.003;
+
+      // Elementos afectados
+      const warpElements = document.querySelectorAll('.warp-target');
+      warpElements.forEach(el => {
+        if (Math.abs(smoothedVelocity) > 0.05) {
+          el.style.transform = `skewY(${skewAngle}deg) scaleY(${scaleY})`;
+        } else {
+          el.style.transform = `skewY(0deg) scaleY(1)`;
         }
-      `;
-
-      // Shader de Fragmentos: Recrea visualmente el pliegue 3D y el sombreado
-      const fsSource = `
-        precision mediump float;
-        varying vec2 vUv;
-        uniform float uTime;
-        uniform float uCurlIntensity; // Intensidad calibrada por el scroll
-        uniform vec2 uResolution;
-
-        void main() {
-          vec2 uv = vUv;
-          
-          // Fondo oscuro base de las secciones (#212121)
-          vec3 darkColor = vec3(0.13, 0.13, 0.13);
-          // Color azul del pliegue (un tono más claro para simular refracción)
-          vec3 blueFoldColor = vec3(0.0, 0.25, 1.0); 
-
-          // 1. Efecto de Deformación del rizo/pergamino
-          // Calculamos una onda que simula la curvatura del papel en la base.
-          // La intensidad controla cuánto se 'enrolla'.
-          float curveHeight = 0.5; // Altura relativa máxima de la curva
-          float deformation = sin(uv.y * 3.14159 * 0.85) * (uCurlIntensity * curveHeight);
-          
-          // Sincronizamos una onda horizontal sutil con el tiempo y el scroll
-          deformation += sin(uv.x * 6.0 + uTime * 0.8) * (uCurlIntensity * 0.015);
-
-          // 2. Efecto de Sombreado (Shading) del pliegue
-          // Simula cómo la luz incide en el papel enrollado, creando una sombra interior.
-          float shade = smoothstep(0.0, 0.35, uv.y + deformation); // Sombra en el interior del rizo
-          shade *= smoothstep(1.0, 0.7, uv.y + deformation);      // Brillo en el borde exterior
-          
-          // Mezclamos el color oscuro con el azul basado en la deformación y el shading
-          vec3 finalColor = mix(darkColor, blueFoldColor, deformation * 2.5);
-          
-          // Aplicamos el sombreado 3D
-          finalColor *= (0.6 + shade * 0.5);
-
-          // 3. Opacidad (Alpha)
-          // Hacemos que sea más opaco donde hay pliegue y transparente en la base pura.
-          float alpha = smoothstep(0.0, 0.15, deformation) * uCurlIntensity;
-
-          gl_FragColor = vec4(finalColor, alpha);
-        }
-      `;
-
-      function createShader(gl, type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-
-      const program = gl.createProgram();
-      gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, vsSource));
-      gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, fsSource));
-      gl.linkProgram(program);
-      gl.useProgram(program);
-
-      const buffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-        -1, -1,  1, -1, -1,  1,
-        -1,  1,  1, -1,  1,  1
-      ]), gl.STATIC_DRAW);
-
-      const posAttr = gl.getAttribLocation(program, 'position');
-      gl.enableVertexAttribArray(posAttr);
-      gl.vertexAttribPointer(posAttr, 2, gl.FLOAT, false, 0, 0);
-
-      const uTimeLoc = gl.getUniformLocation(program, 'uTime');
-      const uResLoc = gl.getUniformLocation(program, 'uResolution');
-      const uCurlLoc = gl.getUniformLocation(program, 'uCurlIntensity');
-
-      gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-      // Listener de Scroll para controlar la intensidad del Curl
-      window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-        
-        // Calculamos cuánto ha hecho scroll (0 a 1)
-        const scrollFraction = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
-        
-        // Mapeamos el scroll a la intensidad del Curl con un ligero "lag" elástico
-        // Se intensifica un poco más hacia el final.
-        curlIntensity = Math.min(1.0, scrollFraction * 1.5 + Math.sin(scrollFraction * 3.14) * 0.2);
       });
 
-      let startTime = performance.now();
-      let currentIntensity = 0;
+      requestAnimationFrame(animarWarpEffect);
+    }
 
-      function render() {
-        const time = (performance.now() - startTime) * 0.001;
-        
-        // Interpolación suave para la intensidad (Efecto resorte suave)
-        currentIntensity += (curlIntensity - currentIntensity) * 0.08;
-
-        gl.uniform1f(uTimeLoc, time);
-        gl.uniform2f(uResLoc, canvas.width, canvas.height);
-        gl.uniform1f(uCurlLoc, currentIntensity); // Pasamos la intensidad suave al shader
-        
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-        requestAnimationFrame(render);
-      }
-      requestAnimationFrame(render);
-    })();
+    requestAnimationFrame(animarWarpEffect);
   </script>
 </body>
 </html>
