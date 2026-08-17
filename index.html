@@ -285,7 +285,7 @@
     }
 
     /* =========================================
-       3. DETALLES DE PROYECTOS & CYLINDER WARP
+       3. DETALLES DE PROYECTOS & TRUE CYLINDER WARP
        ========================================= */
     .btn-back {
       display: inline-flex;
@@ -378,23 +378,18 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       margin-bottom: 50px;
+      perspective: 1400px;
     }
 
-    /* DEFORMACIÓN CILÍNDRICA REAL */
-    .cylinder-warp-item {
+    /* CONTENEDOR CILINDRO REAL MULTI-SLICED */
+    .cylinder-canvas-card {
       position: relative;
-      filter: url(#cylinder-warp-filter);
-      will-change: transform, filter;
-      transform-origin: center center;
-    }
-
-    .gallery-item {
       width: 100%;
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       background-color: #111111;
       border: 1px solid #1f1f1f;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
       cursor: zoom-in;
       opacity: 0;
       transform: translateY(35px) scale(0.98);
@@ -402,27 +397,36 @@
                   transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
                   box-shadow 0.25s ease,
                   border-color 0.3s ease;
+      will-change: transform;
     }
 
-    .gallery-item.visible {
+    .cylinder-canvas-card.visible {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
 
-    .gallery-item:hover {
+    .cylinder-canvas-card:hover {
       border-color: #000FFF;
       box-shadow: 0 16px 36px rgba(0, 15, 255, 0.3);
     }
 
-    .gallery-item img {
+    .cylinder-slice-box {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .cylinder-canvas-card img {
       width: 100%;
       height: auto;
       display: block;
+      border-radius: 14px;
       transition: transform 0.35s ease;
     }
 
-    .gallery-item:hover img {
-      transform: scale(1.03);
+    .cylinder-canvas-card:hover img {
+      transform: scale(1.02);
     }
 
     .related-projects-section {
@@ -455,26 +459,28 @@
       align-items: center;
       gap: 50px;
       margin-top: 10px;
+      perspective: 1400px;
     }
 
-    .cv-hoja-link {
+    .cv-cylinder-card {
       display: block;
       width: 100%;
       cursor: zoom-in;
-      transition: box-shadow 0.25s ease, border-color 0.3s ease;
       background-color: #ffffff;
-      border-radius: 4px;
+      border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
       border: 1px solid #1f1f1f;
+      transition: box-shadow 0.25s ease, border-color 0.3s ease;
+      will-change: transform;
     }
 
-    .cv-hoja-link:hover {
+    .cv-cylinder-card:hover {
       box-shadow: 0 16px 36px rgba(0, 15, 255, 0.3);
       border-color: #000FFF;
     }
 
-    .cv-hoja-img {
+    .cv-cylinder-card img {
       width: 100%;
       height: auto;
       display: block;
@@ -658,17 +664,6 @@
 </head>
 <body>
 
-  <!-- FILTRO DE CURVATURA CILÍNDRICA (DISPLACEMENT MAP) -->
-  <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
-    <defs>
-      <filter id="cylinder-warp-filter" x="-20%" y="-20%" width="140%" height="140%">
-        <!-- Mapa de deformación parabólica pura -->
-        <feTurbulence type="fractalNoise" baseFrequency="0.001 0.04" numOctaves="1" result="noise" />
-        <feDisplacementMap id="cylinder-displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-    </defs>
-  </svg>
-
   <!-- Imagen del conejito seguidor de cursor -->
   <img id="cursor-follower" src="iconsky-03.png" alt="Conejo Follower">
 
@@ -751,7 +746,7 @@
 
   </section>
 
-  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien - Cylinder Warp) -->
+  <!-- 3. Pantalla: DETALLE PROYECTO 1 (Está bien no estar bien) -->
   <section id="vista-proyecto-esta-bien" class="vista-pantalla seccion-oscura">
     
     <button class="btn-back" onclick="mostrarSeccion('trabajos')">
@@ -775,55 +770,35 @@
     </header>
 
     <div class="project-gallery-grid">
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-10.png')">
-          <img src="postg-10.png" alt="Lo que deberíamos llevar en la mochila">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-10.png')">
+        <img src="postg-10.png" alt="Lo que deberíamos llevar en la mochila">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-09.png')">
-          <img src="postg-09.png" alt="Nota perfecta y el proceso real">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-09.png')">
+        <img src="postg-09.png" alt="Nota perfecta y el proceso real">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-08.png')">
-          <img src="postg-08.png" alt="Estoy bien: lo que hay detrás">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-08.png')">
+        <img src="postg-08.png" alt="Estoy bien: lo que hay detrás">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-01.png')">
-          <img src="postg-01.png" alt="¿Por qué me siento tan cansada si solo estudio?">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-01.png')">
+        <img src="postg-01.png" alt="¿Por qué me siento tan cansada si solo estudio?">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-02.png')">
-          <img src="postg-02.png" alt="¿Cómo te sientes hoy realmente?">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-02.png')">
+        <img src="postg-02.png" alt="¿Cómo te sientes hoy realmente?">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-03.png')">
-          <img src="postg-03.png" alt="Mito vs Realidad: Agotamiento constante">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-03.png')">
+        <img src="postg-03.png" alt="Mito vs Realidad: Agotamiento constante">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-04.png')">
-          <img src="postg-04.png" alt="Mitos vs Realidad: Bienestar emocional">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-04.png')">
+        <img src="postg-04.png" alt="Mitos vs Realidad: Bienestar emocional">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-05.png')">
-          <img src="postg-05.png" alt="Red de apoyo ante un examen difícil">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-05.png')">
+        <img src="postg-05.png" alt="Red de apoyo ante un examen difícil">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-06.png')">
-          <img src="postg-06.png" alt="El agotamiento no es normal: OFF / ON">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-06.png')">
+        <img src="postg-06.png" alt="El agotamiento no es normal: OFF / ON">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('postg-07.png')">
-          <img src="postg-07.png" alt="Tu bienestar también se construye con pequeñas acciones">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('postg-07.png')">
+        <img src="postg-07.png" alt="Tu bienestar también se construye con pequeñas acciones">
       </div>
     </div>
 
@@ -854,7 +829,7 @@
 
   </section>
 
-  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB - Cylinder Warp) -->
+  <!-- 4. Pantalla: DETALLE PROYECTO 2 (SOCIAL MEDIA LAB) -->
   <section id="vista-proyecto-social-media" class="vista-pantalla seccion-oscura">
     
     <button class="btn-back" onclick="mostrarSeccion('trabajos')">
@@ -879,58 +854,40 @@
 
     <h2 class="brand-section-title">TAYAZ</h2>
     <div class="project-gallery-grid">
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('La foto de los jeans de Tayaz.png')">
-          <img src="La foto de los jeans de Tayaz.png" alt="Tayaz Jeans">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('La foto de los jeans de Tayaz.png')">
+        <img src="La foto de los jeans de Tayaz.png" alt="Tayaz Jeans">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')">
-          <img src="La foto de la chaqueta y bolso de Tayaz.png" alt="Tayaz Closet Nueva Colección">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('La foto de la chaqueta y bolso de Tayaz.png')">
+        <img src="La foto de la chaqueta y bolso de Tayaz.png" alt="Tayaz Closet Nueva Colección">
       </div>
     </div>
 
     <h2 class="brand-section-title">KARA OK</h2>
     <div class="project-gallery-grid">
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('POST COMERCIAL.png')">
-          <img src="POST COMERCIAL.png" alt="Karaoke Night">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('POST COMERCIAL.png')">
+        <img src="POST COMERCIAL.png" alt="Karaoke Night">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('karaokeoke.png')">
-          <img src="karaokeoke.png" alt="Top Canciones Karaoke">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('karaokeoke.png')">
+        <img src="karaokeoke.png" alt="Top Canciones Karaoke">
       </div>
     </div>
 
     <h2 class="brand-section-title">Jar Donuts</h2>
     <div class="project-gallery-grid">
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('Foto 1 de Jar Donuts.png')">
-          <img src="Foto 1 de Jar Donuts.png" alt="Compromiso con Cajamarca">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 1 de Jar Donuts.png')">
+        <img src="Foto 1 de Jar Donuts.png" alt="Compromiso con Cajamarca">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('Foto 2 de Jar Donuts.png')">
-          <img src="Foto 2 de Jar Donuts.png" alt="Compramos leche a pequeños productores">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 2 de Jar Donuts.png')">
+        <img src="Foto 2 de Jar Donuts.png" alt="Compramos leche a pequeños productores">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('Foto 3 de Jar Donuts.png')">
-          <img src="Foto 3 de Jar Donuts.png" alt="Realizamos pagos constantes y justos">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 3 de Jar Donuts.png')">
+        <img src="Foto 3 de Jar Donuts.png" alt="Realizamos pagos constantes y justos">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('Foto 4 de Jar Donuts.png')">
-          <img src="Foto 4 de Jar Donuts.png" alt="Estabilidad económica familias ganaderas">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 4 de Jar Donuts.png')">
+        <img src="Foto 4 de Jar Donuts.png" alt="Estabilidad económica familias ganaderas">
       </div>
-      <div class="cylinder-warp-item">
-        <div class="gallery-item" onclick="abrirModal('Foto 5 de Jar Donuts.png')">
-          <img src="Foto 5 de Jar Donuts.png" alt="Conoce las historias detrás de cada donut">
-        </div>
+      <div class="cylinder-canvas-card" onclick="abrirModal('Foto 5 de Jar Donuts.png')">
+        <img src="Foto 5 de Jar Donuts.png" alt="Conoce las historias detrás de cada donut">
       </div>
     </div>
 
@@ -965,16 +922,12 @@
   <section id="vista-cv" class="vista-pantalla seccion-oscura">
     
     <div class="cv-container">
-      <div class="cylinder-warp-item" style="width: 100%;">
-        <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
-          <img src="Dayana Alfaro.CV.INGLES.png" alt="CV English" class="cv-hoja-img">
-        </div>
+      <div class="cv-cylinder-card" onclick="abrirModal('Dayana Alfaro.CV.INGLES.png')" title="Clic para ampliar">
+        <img src="Dayana Alfaro.CV.INGLES.png" alt="CV English">
       </div>
 
-      <div class="cylinder-warp-item" style="width: 100%;">
-        <div class="cv-hoja-link" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
-          <img src="Dayana Alfaro.CV.png" alt="CV Español" class="cv-hoja-img">
-        </div>
+      <div class="cv-cylinder-card" onclick="abrirModal('Dayana Alfaro.CV.png')" title="Clic para ampliar">
+        <img src="Dayana Alfaro.CV.png" alt="CV Español">
       </div>
     </div>
 
@@ -995,7 +948,7 @@
     <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
   </div>
 
-  <!-- Lógica JavaScript & Motor Cylinder Warp Displacement -->
+  <!-- Lógica JavaScript & Motor Cilindro Real 3D -->
   <script>
     let scrollObserver = null;
 
@@ -1069,7 +1022,7 @@
     }
 
     function activarScrollReveal() {
-      const items = document.querySelectorAll('.project-gallery-grid .gallery-item');
+      const items = document.querySelectorAll('.cylinder-canvas-card');
       
       if (scrollObserver) {
         scrollObserver.disconnect();
@@ -1166,9 +1119,8 @@
     requestAnimationFrame(animarCursor);
 
     /* =========================================
-       MOTOR DE CURVATURA CILINDRICA REAL (WARP MESH)
+       MOTOR CILINDRICO 3D (ROLLER CURVE)
        ========================================= */
-    const displacementEl = document.getElementById('cylinder-displacement');
     let lastScrollY = window.pageYOffset;
     let scrollVelocity = 0;
     let smoothedVelocity = 0;
@@ -1179,39 +1131,44 @@
       lastScrollY = currentScrollY;
     }, { passive: true });
 
-    function animarCylinderWarp() {
-      // Amortiguación elástica
-      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.14;
-      scrollVelocity *= 0.85;
+    function animarCilindroRoller() {
+      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.15;
+      scrollVelocity *= 0.84;
 
-      // Intensidad de curvatura del cilindro
-      const warpScale = Math.max(-55, Math.min(55, smoothedVelocity * 1.8));
-      
-      if (displacementEl) {
-        if (Math.abs(smoothedVelocity) > 0.05) {
-          displacementEl.setAttribute('scale', warpScale.toFixed(2));
-        } else {
-          displacementEl.setAttribute('scale', '0');
-        }
-      }
+      const cards = document.querySelectorAll('.cylinder-canvas-card, .cv-cylinder-card');
+      const windowH = window.innerHeight;
+      const midScreenY = windowH / 2;
 
-      // Inclinación 3D en sincronía
-      const items = document.querySelectorAll('.cylinder-warp-item');
-      const skew = Math.max(-6, Math.min(6, smoothedVelocity * 0.08));
-      const scaleVal = 1 + Math.abs(smoothedVelocity) * 0.001;
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        
+        if (rect.bottom >= -80 && rect.top <= windowH + 80) {
+          const cardCenterY = rect.top + rect.height / 2;
+          const distFromCenter = (cardCenterY - midScreenY) / midScreenY; // -1 arriba, 0 centro, +1 abajo
+          
+          // Curvatura cilíndrica pura: arco de rotación y traslación en Z
+          const bendAngle = (distFromCenter * 26) + (smoothedVelocity * -0.55);
+          const clampedAngle = Math.max(-38, Math.min(38, bendAngle));
+          
+          // La traslación Z mete los extremos en la profundidad del cilindro
+          const depthZ = -Math.pow(Math.abs(clampedAngle) / 38, 2) * 55;
+          
+          // Inclinación suave de fuga lateral (como en Framer)
+          const isLeftCol = rect.left < window.innerWidth / 2;
+          const skewDeg = (smoothedVelocity * 0.1) * (isLeftCol ? 1 : -0.7);
 
-      items.forEach(item => {
-        if (Math.abs(smoothedVelocity) > 0.05) {
-          item.style.transform = `skewY(${skew.toFixed(2)}deg) scale(${scaleVal.toFixed(3)})`;
-        } else {
-          item.style.transform = `skewY(0deg) scale(1)`;
+          if (Math.abs(smoothedVelocity) > 0.02 || Math.abs(distFromCenter) > 0.05) {
+            card.style.transform = `perspective(1200px) rotateX(${clampedAngle.toFixed(2)}deg) skewY(${skewDeg.toFixed(2)}deg) translateZ(${depthZ.toFixed(1)}px)`;
+          } else {
+            card.style.transform = `perspective(1200px) rotateX(0deg) skewY(0deg) translateZ(0px)`;
+          }
         }
       });
 
-      requestAnimationFrame(animarCylinderWarp);
+      requestAnimationFrame(animarCilindroRoller);
     }
 
-    requestAnimationFrame(animarCylinderWarp);
+    requestAnimationFrame(animarCilindroRoller);
   </script>
 </body>
 </html>
