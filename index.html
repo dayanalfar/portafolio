@@ -285,7 +285,7 @@
     }
 
     /* =========================================
-       3. DETALLES DE PROYECTOS
+       3. DETALLES DE PROYECTOS & CYLINDER
        ========================================= */
     .btn-back {
       display: inline-flex;
@@ -378,7 +378,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       margin-bottom: 50px;
-      perspective: 1800px; /* Perspectiva profunda para evitar distorsión exagerada */
+      perspective: 1200px;
     }
 
     .cylinder-canvas-card {
@@ -390,19 +390,11 @@
       border: 1px solid #1f1f1f;
       box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
       cursor: zoom-in;
-      opacity: 0;
-      transform: translateY(35px) scale(0.98);
-      transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                  transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
-                  box-shadow 0.25s ease,
-                  border-color 0.3s ease;
+      opacity: 1; /* Aparece limpia de inmediato sin deformar */
       will-change: transform;
       transform-origin: center center;
-    }
-
-    .cylinder-canvas-card.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
+      transform-style: preserve-3d;
+      transition: box-shadow 0.25s ease, border-color 0.3s ease;
     }
 
     .cylinder-canvas-card:hover {
@@ -415,11 +407,7 @@
       height: auto;
       display: block;
       border-radius: 14px;
-      transition: transform 0.35s ease;
-    }
-
-    .cylinder-canvas-card:hover img {
-      transform: scale(1.02);
+      pointer-events: none;
     }
 
     .related-projects-section {
@@ -452,7 +440,7 @@
       align-items: center;
       gap: 50px;
       margin-top: 10px;
-      perspective: 1800px;
+      perspective: 1200px;
     }
 
     .cv-cylinder-card {
@@ -464,9 +452,10 @@
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
       border: 1px solid #1f1f1f;
-      transition: box-shadow 0.25s ease, border-color 0.3s ease;
       will-change: transform;
       transform-origin: center center;
+      transform-style: preserve-3d;
+      transition: box-shadow 0.25s ease, border-color 0.3s ease;
     }
 
     .cv-cylinder-card:hover {
@@ -478,6 +467,7 @@
       width: 100%;
       height: auto;
       display: block;
+      pointer-events: none;
     }
 
     /* =========================================
@@ -942,10 +932,8 @@
     <img id="lightbox-img" class="lightbox-img" src="" alt="Vista ampliada">
   </div>
 
-  <!-- Lógica JavaScript & Motor Cilindro Calibrado y Suave -->
+  <!-- Lógica JavaScript -->
   <script>
-    let scrollObserver = null;
-
     function mostrarSeccion(seccionDestino) {
       const vistas = {
         'sobre-mi': document.getElementById('vista-sobre-mi'),
@@ -978,6 +966,13 @@
         document.body.style.backgroundColor = '#000000';
       }
 
+      // Reinicia transformación en reposo antes de abrir
+      document.querySelectorAll('.cylinder-canvas-card, .cv-cylinder-card').forEach(el => {
+        el.style.transform = 'rotateX(0deg) skewY(0deg) translateZ(0px)';
+      });
+      scrollVelocity = 0;
+      smoothedVelocity = 0;
+
       setTimeout(() => {
         for (const key in vistas) {
           if (vistas[key]) vistas[key].style.display = 'none';
@@ -1003,41 +998,13 @@
         }
 
         window.scrollTo(0, 0);
+        lastScrollY = window.pageYOffset;
 
         setTimeout(() => {
           destino.classList.add('activa');
-          
-          if (seccionDestino === 'proyecto-esta-bien' || seccionDestino === 'proyecto-social-media') {
-            activarScrollReveal();
-          }
         }, 30);
 
       }, 120);
-    }
-
-    function activarScrollReveal() {
-      const items = document.querySelectorAll('.cylinder-canvas-card');
-      
-      if (scrollObserver) {
-        scrollObserver.disconnect();
-      }
-
-      scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          } else {
-            entry.target.classList.remove('visible');
-          }
-        });
-      }, {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px"
-      });
-
-      requestAnimationFrame(() => {
-        items.forEach(item => scrollObserver.observe(item));
-      });
     }
 
     function abrirModal(src) {
@@ -1113,7 +1080,7 @@
     requestAnimationFrame(animarCursor);
 
     /* =========================================
-       MOTOR CILINDRICO SUAVE Y CONTROLADO
+       MOTOR CILÍNDRICO FLUIDO AL 15°
        ========================================= */
     let lastScrollY = window.pageYOffset;
     let scrollVelocity = 0;
@@ -1125,10 +1092,10 @@
       lastScrollY = currentScrollY;
     }, { passive: true });
 
-    function animarCilindroSuave() {
-      // Suavizado elástico con amortiguación rápida
-      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.12;
-      scrollVelocity *= 0.82;
+    function animarCilindroFluido() {
+      // Amortiguación suave
+      smoothedVelocity += (scrollVelocity - smoothedVelocity) * 0.14;
+      scrollVelocity *= 0.84;
 
       const cards = document.querySelectorAll('.cylinder-canvas-card, .cv-cylinder-card');
       const windowH = window.innerHeight;
@@ -1136,16 +1103,16 @@
       cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         
-        if (rect.bottom >= -50 && rect.top <= windowH + 50) {
-          // Rotación sutil controlada (máximo 6 grados para evitar vueltas)
-          const clampedRotateX = Math.max(-6, Math.min(6, smoothedVelocity * -0.15));
+        if (rect.bottom >= -60 && rect.top <= windowH + 60) {
+          // Rotación máxima fijada en 15°
+          const clampedRotateX = Math.max(-15, Math.min(15, smoothedVelocity * -0.32));
           
-          // Inclinación lateral mínima
+          // Fuga sutil lateral
           const isLeftCol = rect.left < window.innerWidth / 2;
-          const skewDeg = (smoothedVelocity * 0.02) * (isLeftCol ? 1 : -1);
+          const skewDeg = (smoothedVelocity * 0.04) * (isLeftCol ? 1 : -1);
           
-          // Profundidad Z sutil
-          const depthZ = -Math.abs(clampedRotateX) * 1.5;
+          // Profundidad z suave que arquea la tarjeta
+          const depthZ = -Math.abs(clampedRotateX) * 2.2;
 
           if (Math.abs(smoothedVelocity) > 0.05) {
             card.style.transform = `rotateX(${clampedRotateX.toFixed(2)}deg) skewY(${skewDeg.toFixed(2)}deg) translateZ(${depthZ.toFixed(1)}px)`;
@@ -1155,10 +1122,10 @@
         }
       });
 
-      requestAnimationFrame(animarCilindroSuave);
+      requestAnimationFrame(animarCilindroFluido);
     }
 
-    requestAnimationFrame(animarCilindroSuave);
+    requestAnimationFrame(animarCilindroFluido);
   </script>
 </body>
 </html>
